@@ -1,3 +1,5 @@
 * text=auto
 
 *.wasm          binary
+*.blend         binary
+*.glb           binary
