@@ -1,5 +1,9 @@
-import { LandingView } from './LandingView/LandingView';
+import { SceneView } from './SceneView/SceneView';
+import { ListView } from './ListView/ListView';
+import { ControlsView } from './ControlsView/ControlsView';
 
 export {
-    LandingView,
+    SceneView,
+    ListView,
+    ControlsView,
 };
