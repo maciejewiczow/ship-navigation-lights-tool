@@ -15,31 +15,27 @@ const directedAngle = (a: Vector3, b: Vector3): number => Math.atan2(a.x * b.z -
 export const useAngleLimitedLights = () => {
     const scene = useThree(state => state.scene);
 
-    const lights = useMemo(() => {
-        const lightsToAffect: Mesh<BufferGeometry, MeshStandardMaterial>[] = [];
+    const lights: Mesh<BufferGeometry, MeshStandardMaterial>[] = [];
 
-        scene.traverse(obj => {
-            if (
-                obj instanceof Mesh
+    scene.traverse(obj => {
+        if (
+            obj instanceof Mesh
                 && obj.material instanceof MeshStandardMaterial
                 && objHasOwnProperties(obj.userData, ['angleRelativeTo', 'minVisibilityAngleDeg', 'maxVisibilityAngleDeg'])
-            )
-                lightsToAffect.push(obj);
-        });
+        )
+            lights.push(obj);
+    });
 
-        for (const light of lightsToAffect) {
-            if (typeof light.userData.angleRelativeTo === 'string') {
-                const obj = scene.getObjectByName(light.userData.angleRelativeTo);
+    for (const light of lights) {
+        if (typeof light.userData.angleRelativeTo === 'string') {
+            const obj = scene.getObjectByName(light.userData.angleRelativeTo);
 
-                if (!obj)
-                    console.warn(`AngleRelativeTo: Object with name "${light.userData.angleRelativeTo}" not found in the scene`);
-                else
-                    light.userData.angleRelativeTo = obj;
-            }
+            if (!obj)
+                console.warn(`AngleRelativeTo: Object with name "${light.userData.angleRelativeTo}" not found in the scene`);
+            else
+                light.userData.angleRelativeTo = obj;
         }
-
-        return lightsToAffect;
-    }, [scene]);
+    }
 
     useFrame(({ camera }) => {
         const cameraPos = camera.getWorldPosition(new Vector3());
