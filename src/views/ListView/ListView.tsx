@@ -2,7 +2,15 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Card from 'react-bootstrap/Card';
 import sceneMap from 'scenes';
 import { InvisibleLink } from 'components/InvisibleLink';
-import { Header, Wrapper, CardWrapper, SearchInput } from './parts';
+import { withDefault } from 'utils/withDefault';
+import {
+    Header,
+    Wrapper,
+    CardWrapper,
+    SearchInput,
+    NoResultsWrapper,
+    NoResultsIcon,
+} from './parts';
 
 export const ListView: React.FC = () => {
     const [searchText, setSearchText] = useState('');
@@ -33,18 +41,28 @@ export const ListView: React.FC = () => {
                 />
             </Header>
             <CardWrapper>
-                {Array.from(sceneMap.values())
-                    .filter(({ name }) => name.toLowerCase().includes(searchText.trim().toLowerCase()))
-                    .map(({ name, endpoint, iconPath }) => (
-                        <InvisibleLink to={`/scene/${endpoint}`}>
-                            <Card>
-                                <Card.Img variant="top" src={iconPath} />
-                                <Card.Body>
-                                    <Card.Text>{name}</Card.Text>
-                                </Card.Body>
-                            </Card>
-                        </InvisibleLink>
-                    ))}
+                {
+                    withDefault(
+                        Array.from(sceneMap.values())
+                            .filter(({ name }) => name.toLowerCase().includes(searchText.trim().toLowerCase()))
+                            .map(({ name, id, iconPath }) => (
+                                <InvisibleLink key={id} to={`/scene/${id}`}>
+                                    <Card>
+                                        <Card.Img variant="top" src={iconPath} />
+                                        <Card.Body>
+                                            <Card.Text>{name}</Card.Text>
+                                        </Card.Body>
+                                    </Card>
+                                </InvisibleLink>
+                            )),
+                        (
+                            <NoResultsWrapper>
+                                <NoResultsIcon />
+                                <h2>Pusto</h2>
+                            </NoResultsWrapper>
+                        ),
+                    )
+                }
             </CardWrapper>
         </Wrapper>
     );
