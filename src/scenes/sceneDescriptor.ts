@@ -1,8 +1,8 @@
-import { Component, FunctionComponent } from 'react';
+import { FunctionComponent } from 'react';
 
 export interface SceneDescriptor {
     name: string;
-    endpoint: string;
+    id: string;
     iconPath: string;
     component: FunctionComponent;
 }

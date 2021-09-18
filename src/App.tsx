@@ -9,7 +9,7 @@ const App: React.FC = () => (
     <ConnectedRouter history={history}>
         <Switch>
             <Route path="/controls" component={Views.ControlsView} />
-            <Route path="/scene/:name" component={Views.SceneView} />
+            <Route path="/scene/:id" component={Views.SceneView} />
             <Route path="/" component={Views.ListView} />
         </Switch>
     </ConnectedRouter>

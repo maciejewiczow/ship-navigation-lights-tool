@@ -17,7 +17,7 @@ import sceneMap from 'scenes';
 import { Wrapper } from './parts';
 
 interface SceneViewRouteParams {
-    name?: string;
+    id?: string;
 }
 
 const SceneBase: React.FC = ({ children }) => {
@@ -42,19 +42,19 @@ const SceneBase: React.FC = ({ children }) => {
 };
 
 export const SceneView: React.FC = () => {
-    const { name } = useParams<SceneViewRouteParams>();
+    const { id } = useParams<SceneViewRouteParams>();
 
-    if (!name || !sceneMap.has(name))
+    if (!id || !sceneMap.has(id))
         return <Redirect to="/" />;
 
-    const Scene = sceneMap.get(name)?.component ?? React.Fragment;
+    const Model = sceneMap.get(id)?.component ?? React.Fragment;
 
     return (
         <Wrapper>
             <Suspense fallback={<Loader />}>
-                <Canvas camera={{ position: [100, 100, 0], aspect: 70 }} gl={{ logarithmicDepthBuffer: true }}>
-                    <SceneBase>
-                        <Scene />
+                <Canvas camera={{ position: [140, 146, -262], aspect: 70, near: 0.01, far: 100000 }} gl={{ logarithmicDepthBuffer: true }}>
+                    <SceneBase sceneId={id}>
+                        <Model />
                     </SceneBase>
                 </Canvas>
             </Suspense>
