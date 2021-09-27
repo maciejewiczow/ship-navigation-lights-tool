@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 import { ReactComponent } from 'assets/undraw_No_data_re_kwbl.svg';
+import OriginalCard from 'react-bootstrap/esm/Card';
+import { InvisibleLink } from 'components/InvisibleLink';
 
 export const Wrapper = styled.div`
     padding: 12px 24px;
@@ -20,7 +22,7 @@ export const SearchInput = styled.input`
     border-bottom: 2px solid #777;
 `;
 
-export const CardWrapper = styled.div`
+export const CardsWrapper = styled.div`
     display: flex;
     flex-flow: row wrap;
 
@@ -44,4 +46,45 @@ export const NoResultsIcon = styled(ReactComponent)`
     max-height: 200px;
     margin-bottom: 21px;
     margin-right: 14px;
+`;
+
+export const HorizontalCardBody = styled(OriginalCard.Body)`
+    display: flex;
+    flex-flow: row nowrap;
+
+    .card-text {
+        margin-bottom: 0;
+    }
+`;
+
+export const WholeCardLink = styled(InvisibleLink)`
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+`;
+
+export const CardStyleWrapper = styled.div`
+    .card {
+        position: relative;
+
+        &:hover {
+            color: #0a58ca;
+        }
+
+        a:not(${WholeCardLink}) {
+            z-index: 3;
+        }
+    }
+`;
+
+export const InnerLink = styled.a`
+    font-size: 24px;
+    color: initial;
+    margin-left: 8px;
+
+    display: flex;
+    align-items: center;
 `;

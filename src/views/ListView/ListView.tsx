@@ -1,19 +1,26 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Card from 'react-bootstrap/Card';
+import { BiLinkExternal } from 'react-icons/bi';
+import { useDispatch } from 'react-redux';
+import { push } from 'connected-react-router';
 import sceneMap from 'scenes';
-import { InvisibleLink } from 'components/InvisibleLink';
 import { withDefault } from 'utils/withDefault';
 import {
     Header,
     Wrapper,
-    CardWrapper,
+    CardsWrapper,
     SearchInput,
     NoResultsWrapper,
     NoResultsIcon,
+    HorizontalCardBody,
+    CardStyleWrapper,
+    WholeCardLink,
+    InnerLink,
 } from './parts';
 
 export const ListView: React.FC = () => {
     const [searchText, setSearchText] = useState('');
+    const dispatch = useDispatch();
     const inputRef = useRef<HTMLInputElement>(null);
 
     const onKeyPress = useCallback((e: KeyboardEvent) => {
@@ -29,6 +36,17 @@ export const ListView: React.FC = () => {
         };
     }, [onKeyPress]);
 
+    const openInNewWindow = (href: string) => (e: React.MouseEvent) => {
+        e.preventDefault();
+        window.open(
+            href,
+            'scene',
+            // eslint-disable-next-line no-restricted-globals
+            `height=${screen.availHeight},width=${screen.availWidth},fullscreen=yes,toolbar=no,menubar=no,scrollbars=no,resizable=yes,location=no,directories=no,status=no`,
+        );
+        dispatch(push('/controls'));
+    };
+
     return (
         <Wrapper>
             <Header>
@@ -40,20 +58,27 @@ export const ListView: React.FC = () => {
                     onChange={e => setSearchText(e.target.value)}
                 />
             </Header>
-            <CardWrapper>
+            <CardsWrapper>
                 {
                     withDefault(
                         Array.from(sceneMap.values())
                             .filter(({ name }) => name.toLowerCase().includes(searchText.trim().toLowerCase()))
                             .map(({ name, id, iconPath }) => (
-                                <InvisibleLink key={id} to={`/scene/${id}`}>
+                                <CardStyleWrapper key={id}>
                                     <Card>
+                                        <WholeCardLink to={`/scene/${id}`} />
                                         <Card.Img variant="top" src={iconPath} />
-                                        <Card.Body>
+                                        <HorizontalCardBody>
                                             <Card.Text>{name}</Card.Text>
-                                        </Card.Body>
+                                            <InnerLink
+                                                title="Otwórz w nowym oknie"
+                                                onClick={openInNewWindow(`/scene/${id}?noControls`)}
+                                            >
+                                                <BiLinkExternal />
+                                            </InnerLink>
+                                        </HorizontalCardBody>
                                     </Card>
-                                </InvisibleLink>
+                                </CardStyleWrapper>
                             )),
                         (
                             <NoResultsWrapper>
@@ -63,7 +88,7 @@ export const ListView: React.FC = () => {
                         ),
                     )
                 }
-            </CardWrapper>
+            </CardsWrapper>
         </Wrapper>
     );
 };
