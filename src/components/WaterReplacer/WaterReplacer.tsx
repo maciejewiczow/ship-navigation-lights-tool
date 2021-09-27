@@ -12,9 +12,11 @@ import {
     Vector3,
     ShaderMaterial,
     PlaneGeometry,
+    Vector2,
 } from 'three';
-import { Water as ThreeWater, WaterOptions } from 'three-stdlib';
+import { WaterOptions } from 'three-stdlib';
 import defaultWaterNormalsPath from 'assets/waternormals.jpg';
+import { Water3D, Water3DOptions } from './Water3D';
 
 // export const useWaterShader = (objName: string) => {
 //     const { scene } = useThree();
@@ -56,13 +58,13 @@ import defaultWaterNormalsPath from 'assets/waternormals.jpg';
 //     });
 // };
 
-extend({ ThreeWater });
+extend({ Water3D });
 
 interface WaterProps extends Partial<Overwrite<WaterOptions, { waterNormals: string }>> {
     placeholderName: string;
 }
 
-const defaultWaterConfig: Partial<WaterOptions> = {
+const defaultWaterConfig: Partial<Water3DOptions> = {
     textureWidth: 512,
     textureHeight: 512,
     sunDirection: new Vector3(),
@@ -70,31 +72,48 @@ const defaultWaterConfig: Partial<WaterOptions> = {
     waterColor: 0x001e0f,
     distortionScale: 3.7,
     fog: false,
+    waves: [
+        {
+            direction: new Vector2(1, 0.8),
+            steepness: 0.25,
+            wavelength: 40,
+        },
+        {
+            direction: new Vector2(1, 0.6),
+            steepness: 0.3,
+            wavelength: 25,
+        },
+        {
+            direction: new Vector2(1, 1.3),
+            steepness: 0.25,
+            wavelength: 18,
+        },
+    ],
 };
 
-// TODO: add typing to <threeWater>
+// TODO: add typing to <water>
 declare global {
     // eslint-disable-next-line @typescript-eslint/no-namespace
     namespace JSX {
         interface IntrinsicElements {
-            threeWater: any;
+            water3D: any;
         }
     }
 }
 
-const waterGeometry = new PlaneGeometry(10000, 10000);
+const waterGeometry = new PlaneGeometry(1e4, 1e4, 1e3 / 4, 1e3 / 4);
 
 export const WaterReplacer: React.FC<WaterProps> = ({ placeholderName, waterNormals: waterNormalsPath, ...rest }) => {
-    const ref = useRef<ThreeWater>();
+    const ref = useRef<Water3D>();
     const scene = useThree(s => s.scene);
     const waterNormals = useLoader(TextureLoader, waterNormalsPath ?? defaultWaterNormalsPath);
     const placeholder = scene.getObjectByName(placeholderName);
 
     useLayoutEffect(() => {
-        if (placeholder) {
-            console.log('Making placeholder invisible', placeholder, ref);
+        console.log(ref.current);
+
+        if (placeholder)
             placeholder.visible = false;
-        }
 
         if (ref.current && placeholder) {
             ref.current.position.copy(placeholder.position);
@@ -103,10 +122,8 @@ export const WaterReplacer: React.FC<WaterProps> = ({ placeholderName, waterNorm
         }
 
         return () => {
-            if (placeholder) {
-                console.log('Making placegolder visible again');
+            if (placeholder)
                 placeholder.visible = true;
-            }
         };
     }, [placeholder]);
 
@@ -127,5 +144,5 @@ export const WaterReplacer: React.FC<WaterProps> = ({ placeholderName, waterNorm
             (ref.current.material as ShaderMaterial).uniforms.time.value += delta;
     });
 
-    return <threeWater ref={ref} args={[waterGeometry, config]} />;
+    return <water3D ref={ref} args={[waterGeometry, config]} />;
 };

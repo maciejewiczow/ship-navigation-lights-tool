@@ -35,7 +35,7 @@ export const SceneView: React.FC = () => {
     return (
         <Wrapper>
             <Suspense fallback={<Loader />}>
-                <Canvas camera={{ position: [140, 146, -262], aspect: 70, near: 0.01, far: 100000 }} gl={{ logarithmicDepthBuffer: true }}>
+                <Canvas camera={{ position: [140, 26, -262], aspect: 70, near: 0.01, far: 100000 }} gl={{ logarithmicDepthBuffer: true }}>
                     <SceneBase sceneId={id}>
                         <Model />
                     </SceneBase>
