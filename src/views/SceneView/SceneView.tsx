@@ -8,8 +8,9 @@ import { loadScene } from 'store/Scenes/actions';
 import { scenesSelector } from 'store/Scenes/selectors';
 import { SceneBase } from 'scenes/SceneBase';
 import { Canvas } from 'components/Canvas';
+import { useQueryParams } from 'utils/hooks';
 import { objHasOwnProperty } from 'utils';
-import { Wrapper } from './parts';
+import { ControlsDrawer, DrawerHandle, Wrapper, Controls } from './parts';
 
 interface SceneViewRouteParams {
     id?: string;
@@ -17,6 +18,7 @@ interface SceneViewRouteParams {
 
 export const SceneView: React.FC = () => {
     const { id } = useParams<SceneViewRouteParams>();
+    const [areControlsOpen, setAreControlsOpen] = useState(false);
     const scenes = useSelector(scenesSelector);
     const dispatch = useDispatch();
 
@@ -28,6 +30,8 @@ export const SceneView: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch, id]);
 
+    const queryParams = useQueryParams();
+
     if (!id || !sceneMap.has(id))
         return <Redirect to="/" />;
 
@@ -35,6 +39,17 @@ export const SceneView: React.FC = () => {
 
     return (
         <Wrapper>
+            {!queryParams.has('noControls') && (
+                <ControlsDrawer open={areControlsOpen} handleHeight={40}>
+                    <Controls sceneId={id} />
+                    <DrawerHandle
+                        onClick={() => setAreControlsOpen(state => !state)}
+                        title="Ustawienia sceny"
+                    >
+                        <AiOutlineControl />
+                    </DrawerHandle>
+                </ControlsDrawer>
+            )}
             <Suspense fallback={<Loader />}>
                 <Canvas camera={{ position: [140, 26, -262], aspect: 70, near: 0.01, far: 100000 }} gl={{ logarithmicDepthBuffer: true }}>
                     <SceneBase sceneId={id}>
