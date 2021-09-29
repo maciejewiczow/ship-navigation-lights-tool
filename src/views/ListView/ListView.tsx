@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import { push } from 'connected-react-router';
 import sceneMap from 'scenes';
 import { withDefault } from 'utils/withDefault';
+import { loadScene } from 'store/Scenes/actions';
 import {
     Header,
     Wrapper,
@@ -36,14 +37,17 @@ export const ListView: React.FC = () => {
         };
     }, [onKeyPress]);
 
-    const openInNewWindow = (href: string) => (e: React.MouseEvent) => {
+    const openSceneInNewWindow = (id: string) => (e: React.MouseEvent) => {
         e.preventDefault();
+
+        dispatch(loadScene(id));
         window.open(
-            href,
+            `/scene/${id}?noControls`,
             'scene',
             // eslint-disable-next-line no-restricted-globals
             `height=${screen.availHeight},width=${screen.availWidth},fullscreen=yes,toolbar=no,menubar=no,scrollbars=no,resizable=yes,location=no,directories=no,status=no`,
         );
+
         dispatch(push('/controls'));
     };
 
@@ -72,7 +76,7 @@ export const ListView: React.FC = () => {
                                             <Card.Text>{name}</Card.Text>
                                             <InnerLink
                                                 title="Otwórz w nowym oknie"
-                                                onClick={openInNewWindow(`/scene/${id}?noControls`)}
+                                                onClick={openSceneInNewWindow(id)}
                                             >
                                                 <BiLinkExternal />
                                             </InnerLink>
