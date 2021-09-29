@@ -7,6 +7,7 @@ export interface SceneParams {
     isNight: boolean;
     angle: number;
     cameraHeight: number;
+    backgroundEnabled: boolean;
 }
 
 export const initialScenesState: ScenesState = {};
@@ -14,5 +15,6 @@ export const initialScenesState: ScenesState = {};
 export const initialSceneParams: SceneParams = {
     isNight: true,
     angle: Math.PI / 3,
-    cameraHeight: 60,
+    cameraHeight: 5,
+    backgroundEnabled: true,
 };
