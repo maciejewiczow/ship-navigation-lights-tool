@@ -10,7 +10,6 @@ import {
     TextureLoader,
     RepeatWrapping,
     Vector3,
-    ShaderMaterial,
     PlaneGeometry,
     Vector2,
 } from 'three';
@@ -68,14 +67,14 @@ const defaultWaterConfig: Partial<Water3DOptions> = {
     textureWidth: 512,
     textureHeight: 512,
     sunDirection: new Vector3(),
-    sunColor: 0xffffff,
-    waterColor: 0x001e0f,
+    sunColor: 0xaaaaaa,
+    waterColor: 0x005896,
     distortionScale: 3.7,
     fog: false,
     waves: [
         {
             direction: new Vector2(1, 0.8),
-            steepness: 0.25,
+            steepness: 0.5,
             wavelength: 40,
         },
         {
@@ -109,9 +108,9 @@ export const WaterReplacer: React.FC<WaterProps> = ({ placeholderName, waterNorm
     const waterNormals = useLoader(TextureLoader, waterNormalsPath ?? defaultWaterNormalsPath);
     const placeholder = scene.getObjectByName(placeholderName);
 
-    useLayoutEffect(() => {
-        console.log(ref.current);
+    console.log(scene);
 
+    useLayoutEffect(() => {
         if (placeholder)
             placeholder.visible = false;
 
@@ -119,6 +118,7 @@ export const WaterReplacer: React.FC<WaterProps> = ({ placeholderName, waterNorm
             ref.current.position.copy(placeholder.position);
             ref.current.rotation.copy(placeholder.rotation);
             ref.current.rotateX(-Math.PI / 2);
+            // ref.current.material.transparent = true;
         }
 
         return () => {
@@ -141,8 +141,19 @@ export const WaterReplacer: React.FC<WaterProps> = ({ placeholderName, waterNorm
 
     useFrame((_, delta) => {
         if (ref.current?.material)
-            (ref.current.material as ShaderMaterial).uniforms.time.value += delta;
+            ref.current.material.uniforms.time.value += delta;
     });
 
-    return <water3D ref={ref} args={[waterGeometry, config]} />;
+    return (
+        <React.Fragment>
+            <water3D ref={ref} args={[waterGeometry, config]} />
+            {/* <Plane
+                args={[1e4, 1e4, 1e3 / 4, 1e3 / 4]}
+                position={placeholder?.position && [placeholder.position.x, placeholder.position.y - 10, placeholder.position.z]}
+                rotation-x={-Math.PI / 2}
+            >
+                <meshPhongMaterial attach="material" color="#000000" />
+            </Plane> */}
+        </React.Fragment>
+    );
 };

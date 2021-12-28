@@ -2,14 +2,14 @@ import React, { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import Button from 'react-bootstrap/Button';
 import { IoIosCloudyNight, IoIosSunny } from 'react-icons/io';
 import { sceneParams } from 'store/Scenes/selectors';
 import { ClassNameProps } from 'utils/classNameProps';
 import { updateSceneParams } from 'store/Scenes/actions';
 import { degToRad, radToDeg } from 'three/src/math/MathUtils';
 import { SceneParams } from 'store/Scenes/store';
-import { DayButton, NightButton } from './parts';
+import { Checkbox } from 'components/Checkbox';
+import { DayButton, NightButton, FormContentWrapper } from './parts';
 
 interface ControlsProps extends ClassNameProps {
     sceneId: string;
@@ -27,20 +27,9 @@ export const Controls: React.FC<ControlsProps> = ({ sceneId, className }) => {
 
     return (
         <Form className={className}>
-            <Form.Group controlId="angle">
-                <Form.Label>Kąt do patrzącego (stopnie)</Form.Label>
-                <Form.Control
-                    type="range"
-                    min="0"
-                    max="360"
-                    step="0.1"
-                    value={radToDeg(params.angle)}
-                    onChange={e => dispatch(updateScene({ angle: degToRad(+e.target.value) }))}
-                />
-                {Math.round(radToDeg(params.angle))}&#176;
-            </Form.Group>
-            <Form.Group controlId="daytime">
-                <Form.Label>Dzień/noc</Form.Label>
+            <FormContentWrapper>
+
+                <Form.Label>Pora dnia</Form.Label>
                 <ButtonGroup>
                     <DayButton
                         variant="outline-primary"
@@ -71,27 +60,43 @@ export const Controls: React.FC<ControlsProps> = ({ sceneId, className }) => {
                         <IoIosCloudyNight />
                     </NightButton>
                 </ButtonGroup>
-            </Form.Group>
-            <Form.Group controlId="background">
-                <Form.Label>Pokaż gwiazdy</Form.Label>
-                <Form.Check
-                    type="checkbox"
+                <Form.Label htmlFor="background">Pokaż gwiazdy</Form.Label>
+                <Checkbox
+                    onClick={() => dispatch(updateScene({ backgroundEnabled: !params.backgroundEnabled }))}
                     checked={params.backgroundEnabled}
-                    onChange={e => dispatch(updateScene({ backgroundEnabled: e.target.checked }))}
                 />
-            </Form.Group>
-            <Form.Group controlId="cameraheight">
+                <Form.Label>Swobodna kamera</Form.Label>
+                <Checkbox
+                    onClick={() => dispatch(updateScene({ freeCameraEnabled: !params.freeCameraEnabled }))}
+                    checked={params.freeCameraEnabled}
+                />
+                <Form.Label>Kąt do patrzącego (stopnie)</Form.Label>
+                <div>
+                    <Form.Control
+                        type="range"
+                        min="0"
+                        max="360"
+                        step="0.1"
+                        value={radToDeg(params.angle)}
+                        onChange={e => dispatch(updateScene({ angle: degToRad(+e.target.value) }))}
+                        disabled={params.freeCameraEnabled}
+                    />
+                    &nbsp;{Math.round(radToDeg(params.angle)) - 180}&#176;
+                </div>
                 <Form.Label>Wysokość kamery</Form.Label>
-                <Form.Control
-                    type="range"
-                    min="0"
-                    max="60"
-                    step="1"
-                    value={params.cameraHeight}
-                    onChange={e => dispatch(updateScene({ cameraHeight: +e.target.value }))}
-                />
-                {params.cameraHeight}m
-            </Form.Group>
+                <div>
+                    <Form.Control
+                        type="range"
+                        min="0"
+                        max="60"
+                        step="1"
+                        value={params.cameraHeight}
+                        onChange={e => dispatch(updateScene({ cameraHeight: +e.target.value }))}
+                        disabled={params.freeCameraEnabled}
+                    />
+                    &nbsp;{Math.round(params.cameraHeight)}m
+                </div>
+            </FormContentWrapper>
         </Form>
     );
 };

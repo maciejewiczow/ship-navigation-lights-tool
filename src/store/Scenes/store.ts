@@ -7,6 +7,7 @@ export interface SceneParams {
     isNight: boolean;
     angle: number;
     cameraHeight: number;
+    freeCameraEnabled: boolean;
     backgroundEnabled: boolean;
 }
 
@@ -17,4 +18,5 @@ export const initialSceneParams: SceneParams = {
     angle: Math.PI / 3,
     cameraHeight: 5,
     backgroundEnabled: true,
+    freeCameraEnabled: true,
 };

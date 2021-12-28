@@ -10,6 +10,8 @@ export const ButtonBase = styled(Button)`
     }
 `;
 
+// Produces an internal TS error - union too complex to represent
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 export const DayButton = styled(ButtonBase)`
     &.active, &:hover {
@@ -21,6 +23,7 @@ export const DayButton = styled(ButtonBase)`
     color: #AF8C00;
 `;
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 export const NightButton = styled(ButtonBase)`
     &.active, &:hover {
@@ -29,4 +32,10 @@ export const NightButton = styled(ButtonBase)`
     }
     border-color: #260072;
     color: #260072;
+`;
+
+export const FormContentWrapper = styled.div`
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-row-gap: 8px;
 `;
