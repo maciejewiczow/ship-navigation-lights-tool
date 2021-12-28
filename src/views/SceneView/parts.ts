@@ -1,5 +1,6 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { Controls as OriginalControls } from 'components/Controls';
+import { Html as OriginalHtml } from '@react-three/drei';
 
 export const Wrapper = styled.div`
     width: 100vw;
@@ -19,6 +20,8 @@ export const DrawerHandle = styled.div`
     display: flex;
     justify-content: flex-end;
     cursor: pointer;
+
+    transition: all 0.2s ease-in-out;
 `;
 
 export const ControlsDrawer = styled.div<{ open: boolean; handleHeight: number }>`
@@ -33,13 +36,18 @@ export const ControlsDrawer = styled.div<{ open: boolean; handleHeight: number }
         height: ${({ handleHeight }) => handleHeight}px;
     }
 
-    ${({ open, handleHeight }) => (!open ? `
+    ${({ open, handleHeight }) => !open && css`
         transform: translateY(calc(-100% + ${handleHeight}px));
-    ` : ''
-    )}
+    `}
 `;
 
 export const Controls = styled(OriginalControls)`
     padding: 12px 18px;
     background: white;
+    border-bottom-left-radius: 3px;
+`;
+
+export const Html = styled(OriginalHtml)`
+    background: black;
+    /* padding: 12px; */
 `;

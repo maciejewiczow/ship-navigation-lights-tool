@@ -10,7 +10,13 @@ import { SceneBase } from 'scenes/SceneBase';
 import { Canvas } from 'components/Canvas';
 import { useQueryParams } from 'utils/hooks';
 import { objHasOwnProperty } from 'utils';
-import { ControlsDrawer, DrawerHandle, Wrapper, Controls } from './parts';
+import {
+    ControlsDrawer,
+    DrawerHandle,
+    Wrapper,
+    Controls,
+    Html,
+} from './parts';
 
 interface SceneViewRouteParams {
     id?: string;
@@ -50,13 +56,13 @@ export const SceneView: React.FC = () => {
                     </DrawerHandle>
                 </ControlsDrawer>
             )}
-            <Suspense fallback={<Loader />}>
-                <Canvas camera={{ position: [140, 26, -262], aspect: 70, near: 0.01, far: 100000 }} gl={{ logarithmicDepthBuffer: true }}>
+            <Canvas camera={{ position: [140, 26, -262], aspect: 70, near: 0.01, far: 100000 }} gl={{ logarithmicDepthBuffer: true }}>
+                <Suspense fallback={<Html center><Loader /></Html>}>
                     <SceneBase sceneId={id}>
                         <Model />
                     </SceneBase>
-                </Canvas>
-            </Suspense>
+                </Suspense>
+            </Canvas>
         </Wrapper>
     );
 };
