@@ -74,17 +74,17 @@ const defaultWaterConfig: Partial<Water3DOptions> = {
     waves: [
         {
             direction: new Vector2(1, 0.8),
-            steepness: 0.5,
+            steepness: 0.1,
             wavelength: 40,
         },
         {
             direction: new Vector2(1, 0.6),
-            steepness: 0.3,
+            steepness: 0.05,
             wavelength: 25,
         },
         {
             direction: new Vector2(1, 1.3),
-            steepness: 0.25,
+            steepness: 0.025,
             wavelength: 18,
         },
     ],
