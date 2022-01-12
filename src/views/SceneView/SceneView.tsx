@@ -5,11 +5,9 @@ import { AiOutlineControl } from 'react-icons/ai';
 import { Loader } from 'components/Loader';
 import sceneMap from 'scenes';
 import { loadScene } from 'store/Scenes/actions';
-import { scenesSelector } from 'store/Scenes/selectors';
 import { SceneBase } from 'scenes/SceneBase';
 import { Canvas } from 'components/Canvas';
 import { useQueryParams } from 'utils/hooks';
-import { objHasOwnProperty } from 'utils';
 import {
     ControlsDrawer,
     DrawerHandle,
@@ -25,14 +23,13 @@ interface SceneViewRouteParams {
 export const SceneView: React.FC = () => {
     const { id } = useParams<SceneViewRouteParams>();
     const [areControlsOpen, setAreControlsOpen] = useState(false);
-    const scenes = useSelector(scenesSelector);
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if (id && sceneMap.has(id) && !objHasOwnProperty(scenes, id))
+        if (id && sceneMap.has(id))
             dispatch(loadScene(id));
 
-    // this effect shoudl not trigger if scenes are modified
+    // this effect should not trigger if scenes are modified
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch, id]);
 

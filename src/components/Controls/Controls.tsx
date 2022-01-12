@@ -3,11 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import { IoIosCloudyNight, IoIosSunny } from 'react-icons/io';
-import { sceneParams } from 'store/Scenes/selectors';
+import { currentScene } from 'store/Scenes/selectors';
 import { ClassNameProps } from 'utils/classNameProps';
 import { updateSceneParams } from 'store/Scenes/actions';
 import { degToRad, radToDeg } from 'three/src/math/MathUtils';
-import { SceneParams } from 'store/Scenes/store';
 import { Checkbox } from 'components/Checkbox';
 import { DayButton, NightButton, FormContentWrapper } from './parts';
 
@@ -15,12 +14,9 @@ interface ControlsProps extends ClassNameProps {
     sceneId: string;
 }
 
-const createUpdateScene = (sceneId: string) => (params: Partial<SceneParams>) => updateSceneParams(sceneId, params);
-
 export const Controls: React.FC<ControlsProps> = ({ sceneId, className }) => {
     const dispatch = useDispatch();
-    const params = useSelector(sceneParams(sceneId));
-    const updateScene = useMemo(() => createUpdateScene(sceneId), [sceneId]);
+    const params = useSelector(currentScene);
 
     if (!params)
         return null;
@@ -36,7 +32,7 @@ export const Controls: React.FC<ControlsProps> = ({ sceneId, className }) => {
                         active={!params.isNight}
                         onClick={() => {
                             if (params.isNight) {
-                                dispatch(updateScene({
+                                dispatch(updateSceneParams({
                                     isNight: false,
                                 }));
                             }
@@ -50,7 +46,7 @@ export const Controls: React.FC<ControlsProps> = ({ sceneId, className }) => {
                         active={params.isNight}
                         onClick={() => {
                             if (!params.isNight) {
-                                dispatch(updateScene({
+                                dispatch(updateSceneParams({
                                     isNight: true,
                                 }));
                             }
@@ -62,12 +58,12 @@ export const Controls: React.FC<ControlsProps> = ({ sceneId, className }) => {
                 </ButtonGroup>
                 <Form.Label htmlFor="background">Pokaż gwiazdy</Form.Label>
                 <Checkbox
-                    onClick={() => dispatch(updateScene({ backgroundEnabled: !params.backgroundEnabled }))}
+                    onClick={() => dispatch(updateSceneParams({ backgroundEnabled: !params.backgroundEnabled }))}
                     checked={params.backgroundEnabled}
                 />
                 <Form.Label>Swobodna kamera</Form.Label>
                 <Checkbox
-                    onClick={() => dispatch(updateScene({ freeCameraEnabled: !params.freeCameraEnabled }))}
+                    onClick={() => dispatch(updateSceneParams({ freeCameraEnabled: !params.freeCameraEnabled }))}
                     checked={params.freeCameraEnabled}
                 />
                 <Form.Label>Kąt do patrzącego (stopnie)</Form.Label>
@@ -78,7 +74,7 @@ export const Controls: React.FC<ControlsProps> = ({ sceneId, className }) => {
                         max="360"
                         step="0.1"
                         value={radToDeg(params.angle)}
-                        onChange={e => dispatch(updateScene({ angle: degToRad(+e.target.value) }))}
+                        onChange={e => dispatch(updateSceneParams({ angle: degToRad(+e.target.value) }))}
                         disabled={params.freeCameraEnabled}
                     />
                     &nbsp;{Math.round(radToDeg(params.angle)) - 180}&#176;
@@ -91,7 +87,7 @@ export const Controls: React.FC<ControlsProps> = ({ sceneId, className }) => {
                         max="60"
                         step="1"
                         value={params.cameraHeight}
-                        onChange={e => dispatch(updateScene({ cameraHeight: +e.target.value }))}
+                        onChange={e => dispatch(updateSceneParams({ cameraHeight: +e.target.value }))}
                         disabled={params.freeCameraEnabled}
                     />
                     &nbsp;{Math.round(params.cameraHeight)}m

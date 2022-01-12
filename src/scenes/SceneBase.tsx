@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useMemo } from 'react';
+import React, { useCallback, useLayoutEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFrame, useThree } from '@react-three/fiber';
 import { Environment, Sky, OrbitControls } from '@react-three/drei';
@@ -10,11 +10,13 @@ import starsPy from 'assets/Real Stars Skybox/py.png';
 import starsNy from 'assets/Real Stars Skybox/ny.png';
 import starsPz from 'assets/Real Stars Skybox/pz.png';
 import starsNz from 'assets/Real Stars Skybox/nz.png';
-import { sceneParams } from 'store/Scenes/selectors';
+import { currentScene } from 'store/Scenes/selectors';
 import { WaterReplacer } from 'components/WaterReplacer';
 import { updateSceneParams } from 'store/Scenes/actions';
-import { Event, Vector3 } from 'three';
+import { Vector3 } from 'three';
+import sceneMap from 'scenes';
 import { useAngleLimitedLights } from './ThreeHooks/useAngleLimitedLights';
+import { emptyDescriptor } from './ThreeHooks/lightsDescriptor';
 
 interface SceneBaseProps {
     sceneId: string;
@@ -23,17 +25,24 @@ interface SceneBaseProps {
 export const SceneBase: React.FC<SceneBaseProps> = ({ sceneId, children }) => {
     const { scene, camera } = useThree();
     const dispatch = useDispatch();
-    const { isNight, backgroundEnabled, freeCameraEnabled, cameraHeight, angle } = useSelector(sceneParams(sceneId));
+    const {
+        isNight,
+        backgroundEnabled,
+        freeCameraEnabled,
+        cameraHeight,
+        angle,
+        distance,
+    } = useSelector(currentScene);
 
     const model = scene.getObjectByName('Statek');
     const target = useMemo(() => new Vector3(0, 0, 0), []);
 
-    useAngleLimitedLights();
+    useAngleLimitedLights(sceneMap.get(sceneId)?.lightsDescriptor ?? emptyDescriptor);
 
     useLayoutEffect(() => {
         if (!freeCameraEnabled) {
             if (cameraHeight > 60) {
-                dispatch(updateSceneParams(sceneId, {
+                dispatch(updateSceneParams({
                     cameraHeight: 60,
                 }));
             }
@@ -42,7 +51,7 @@ export const SceneBase: React.FC<SceneBaseProps> = ({ sceneId, children }) => {
 
             const len = camera.position.length();
             const pos = dir
-                .applyAxisAngle(new Vector3(0, 1, 0), angle)
+                .applyAxisAngle(new Vector3(0, 1, 0), angle - Math.PI / 2)
                 // .applyAxisAngle(camera.position.clone().cross(camera.up), Math.asin(cameraHeight / len));
                 .multiplyScalar(len);
 
@@ -101,12 +110,10 @@ export const SceneBase: React.FC<SceneBaseProps> = ({ sceneId, children }) => {
                     <WaterReplacer placeholderName="Woda" waterColor="#000000" sunColor="#222222" />
                     <ambientLight intensity={0.4} />
                     <pointLight position={[100, 100, 100]} />
-                    {/* <pointLight position={[-100, -100, -100]} /> */}
                 </React.Fragment>
             )}
             {freeCameraEnabled && (
                 <OrbitControls
-                    camera={camera}
                     target={target}
                     enablePan={false}
                     enableDamping={false}

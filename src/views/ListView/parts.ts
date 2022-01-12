@@ -28,6 +28,7 @@ export const CardsWrapper = styled.div`
 
     > * {
         width: 300px;
+        margin-right: 8px;
     }
 `;
 
@@ -51,6 +52,7 @@ export const NoResultsIcon = styled(ReactComponent)`
 export const HorizontalCardBody = styled(OriginalCard.Body)`
     display: flex;
     flex-flow: row nowrap;
+    max-height: 100px;
 
     .card-text {
         margin-bottom: 0;
@@ -69,6 +71,7 @@ export const WholeCardLink = styled(InvisibleLink)`
 export const CardStyleWrapper = styled.div`
     .card {
         position: relative;
+        height: 100%;
 
         &:hover {
             color: #0a58ca;
@@ -76,6 +79,12 @@ export const CardStyleWrapper = styled.div`
 
         a:not(${WholeCardLink}) {
             z-index: 3;
+        }
+
+        img {
+            object-fit: contain;
+            background: black;
+            height: 100%;
         }
     }
 `;
@@ -87,4 +96,5 @@ export const InnerLink = styled.a`
 
     display: flex;
     align-items: center;
+    cursor: pointer;
 `;

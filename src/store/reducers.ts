@@ -9,7 +9,7 @@ import { scenesReducer } from './Scenes/reducers';
 const createRootReducer = (history: History) => withReduxStateSync(
     combineReducers<AppState>({
         router: connectRouter(history),
-        scenes: scenesReducer,
+        currentScene: scenesReducer,
     }),
 );
 
