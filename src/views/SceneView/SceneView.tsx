@@ -8,6 +8,7 @@ import { loadScene } from 'store/Scenes/actions';
 import { SceneBase } from 'scenes/SceneBase';
 import { Canvas } from 'components/Canvas';
 import { useQueryParams } from 'utils/hooks';
+import { lightSetParamName, noControlsParamName } from 'appConstants';
 import {
     ControlsDrawer,
     DrawerHandle,
@@ -24,16 +25,18 @@ export const SceneView: React.FC = () => {
     const { id } = useParams<SceneViewRouteParams>();
     const [areControlsOpen, setAreControlsOpen] = useState(false);
     const dispatch = useDispatch();
+    const queryParams = useQueryParams();
 
     useEffect(() => {
-        if (id && sceneMap.has(id))
-            dispatch(loadScene(id));
+        if (id && sceneMap.has(id) && queryParams.has(lightSetParamName)) {
+            // Checked if it is not null just above
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            dispatch(loadScene(sceneMap.get(id)!));
+        }
 
     // this effect should not trigger if scenes are modified
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch, id]);
-
-    const queryParams = useQueryParams();
 
     if (!id || !sceneMap.has(id))
         return <Redirect to="/" />;
@@ -42,7 +45,7 @@ export const SceneView: React.FC = () => {
 
     return (
         <Wrapper>
-            {!queryParams.has('noControls') && (
+            {!queryParams.has(noControlsParamName) && (
                 <ControlsDrawer open={areControlsOpen} handleHeight={40}>
                     <Controls sceneId={id} />
                     <DrawerHandle

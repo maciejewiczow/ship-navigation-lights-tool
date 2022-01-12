@@ -10,7 +10,7 @@ import starsPy from 'assets/Real Stars Skybox/py.png';
 import starsNy from 'assets/Real Stars Skybox/ny.png';
 import starsPz from 'assets/Real Stars Skybox/pz.png';
 import starsNz from 'assets/Real Stars Skybox/nz.png';
-import { currentScene } from 'store/Scenes/selectors';
+import { currentSceneParams } from 'store/Scenes/selectors';
 import { WaterReplacer } from 'components/WaterReplacer';
 import { updateSceneParams } from 'store/Scenes/actions';
 import { Vector3 } from 'three';
@@ -32,7 +32,7 @@ export const SceneBase: React.FC<SceneBaseProps> = ({ sceneId, children }) => {
         cameraHeight,
         angle,
         distance,
-    } = useSelector(currentScene);
+    } = useSelector(currentSceneParams);
 
     const model = scene.getObjectByName('Statek');
     const target = useMemo(() => new Vector3(0, 0, 0), []);

@@ -1,7 +1,7 @@
+import { SceneDescriptor } from 'scenes/sceneDescriptor';
+
 // TODO: Figure out how to implement scene-specific settings
 export interface SceneParams {
-    name?: string;
-    id?: string;
     isNight: boolean;
     angle: number;
     cameraHeight: number;
@@ -10,7 +10,12 @@ export interface SceneParams {
     backgroundEnabled: boolean;
 }
 
-export type SceneState = SceneParams;
+export type CurrentScene = Omit<SceneDescriptor, 'component'>;
+
+export interface SceneState {
+    params: SceneParams;
+    sceneDesc?: CurrentScene;
+}
 
 export const initialSceneParams: SceneParams = {
     isNight: true,
@@ -21,4 +26,6 @@ export const initialSceneParams: SceneParams = {
     freeCameraEnabled: true,
 };
 
-export const initialScenesState: SceneState = initialSceneParams;
+export const initialScenesState: SceneState = {
+    params: initialSceneParams,
+};

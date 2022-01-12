@@ -40,7 +40,12 @@ export const ListView: React.FC = () => {
     const openSceneInNewWindow = (id: string) => (e: React.MouseEvent) => {
         e.preventDefault();
 
-        dispatch(loadScene(id));
+        if (!sceneMap.has(id))
+            return;
+
+        // checked above
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        dispatch(loadScene(sceneMap.get(id)!));
         window.open(
             `/scene/${id}?noControls`,
             'scene',

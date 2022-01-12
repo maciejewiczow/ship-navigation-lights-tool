@@ -1,5 +1,4 @@
 import { LightsDescriptor } from 'scenes/ThreeHooks/lightsDescriptor';
-import inRouteIconPath from 'assets/models/cargo-ship/icon.jpg';
 
 export default {
     angleLimitedLights: {

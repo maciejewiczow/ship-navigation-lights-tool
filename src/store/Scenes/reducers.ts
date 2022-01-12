@@ -1,7 +1,7 @@
 import produce from 'immer';
 import { Reducer } from 'redux';
 import { SceneAction, SceneActionType } from './constants';
-import { initialSceneParams, initialScenesState, SceneState } from './store';
+import { initialScenesState, SceneState } from './store';
 
 export const scenesReducer: Reducer<SceneState, SceneAction> = (
     state = initialScenesState,
@@ -10,16 +10,16 @@ export const scenesReducer: Reducer<SceneState, SceneAction> = (
     switch (action.type) {
         case SceneActionType.loadScene:
             return {
-                ...initialSceneParams,
-                name: action.name,
-                id: action.id,
+                ...initialScenesState,
+                sceneDesc: {
+                    ...action.scene,
+                },
             };
 
         case SceneActionType.updateParams:
-            return {
-                ...state,
-                ...action.params,
-            };
+            return produce(state, draft => {
+                Object.assign(draft.params, action.params);
+            });
 
         default:
             return state;

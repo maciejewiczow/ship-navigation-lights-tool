@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import { IoIosCloudyNight, IoIosSunny } from 'react-icons/io';
-import { currentScene } from 'store/Scenes/selectors';
+import { currentSceneParams } from 'store/Scenes/selectors';
 import { ClassNameProps } from 'utils/classNameProps';
 import { updateSceneParams } from 'store/Scenes/actions';
 import { degToRad, radToDeg } from 'three/src/math/MathUtils';
@@ -16,7 +16,7 @@ interface ControlsProps extends ClassNameProps {
 
 export const Controls: React.FC<ControlsProps> = ({ sceneId, className }) => {
     const dispatch = useDispatch();
-    const params = useSelector(currentScene);
+    const params = useSelector(currentSceneParams);
 
     if (!params)
         return null;

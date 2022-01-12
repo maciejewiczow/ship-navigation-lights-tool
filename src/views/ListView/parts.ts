@@ -29,6 +29,7 @@ export const CardsWrapper = styled.div`
     > * {
         width: 300px;
         margin-right: 8px;
+        margin-bottom: 8px;
     }
 `;
 
@@ -52,7 +53,7 @@ export const NoResultsIcon = styled(ReactComponent)`
 export const HorizontalCardBody = styled(OriginalCard.Body)`
     display: flex;
     flex-flow: row nowrap;
-    max-height: 100px;
+    min-height: 130px;
 
     .card-text {
         margin-bottom: 0;
@@ -72,6 +73,7 @@ export const CardStyleWrapper = styled.div`
     .card {
         position: relative;
         height: 100%;
+        max-height: 400px;
 
         &:hover {
             color: #0a58ca;
