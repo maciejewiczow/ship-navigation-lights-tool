@@ -64,16 +64,20 @@ export const SceneBase: React.FC<SceneBaseProps> = ({ sceneId, children }) => {
         dispatch,
     ]);
 
-    const handleCameraMovement = debounce(() => {
-        const pos = camera.position;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const handleCameraMovement = useCallback(
+        debounce(() => {
+            const pos = camera.position;
 
-        const dir = model?.getWorldDirection(new Vector3()) ?? new Vector3(1, 0, 0);
+            const dir = model?.getWorldDirection(new Vector3()) ?? new Vector3(1, 0, 0);
 
-        dispatch(updateSceneParams(sceneId, {
-            angle: new Vector3(pos.x, 0, pos.z).angleTo(dir),
-            cameraHeight: pos.y,
-        }));
-    }, 200);
+            dispatch(updateSceneParams({
+                angle: new Vector3(pos.x, 0, pos.z).angleTo(dir) + Math.PI / 2,
+                cameraHeight: pos.y,
+            }));
+        }, 200),
+        [],
+    );
 
     useFrame(() => {
         if (camera.position.y < 3)
