@@ -1,0 +1,9 @@
+{
+    "angleLimitedLights": {
+        "light": {
+            "angleRelativeTo": "",
+            "minVisibilityAngle": 0,
+            "maxVisibilityAngle": 0
+        }
+    }
+}
