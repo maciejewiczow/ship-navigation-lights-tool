@@ -1,5 +1,5 @@
 import iconPath from 'assets/models/cargo-ship/icon.jpg';
-import lightsDescriptor from './lights.json';
+import lightsDescriptor from './lights';
 import { CargoShipScene } from './CargoShipScene';
 import { SceneDescriptor } from '../sceneDescriptor';
 

@@ -1,5 +1,5 @@
 import iconPath from 'assets/models/sailboat-motor/icon.jpg';
-import lightsDescriptor from './lights.json';
+import lightsDescriptor from './lights';
 import { SailboatMotorScene } from './SailboatMotorScene';
 import { SceneDescriptor } from '../sceneDescriptor';
 
