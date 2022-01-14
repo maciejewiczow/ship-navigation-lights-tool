@@ -59,6 +59,7 @@ export const SceneBase: React.FC<SceneBaseProps> = ({ sceneId, children }) => {
 
             camera.position.y = cameraHeight;
             camera.position.multiplyScalar(len / camera.position.length());
+            camera.position.multiplyScalar(distance / camera.position.length());
 
             camera.lookAt(target);
         }
@@ -71,6 +72,7 @@ export const SceneBase: React.FC<SceneBaseProps> = ({ sceneId, children }) => {
         target,
         sceneId,
         dispatch,
+        distance,
     ]);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -83,6 +85,7 @@ export const SceneBase: React.FC<SceneBaseProps> = ({ sceneId, children }) => {
             dispatch(updateSceneParams({
                 angle: new Vector3(pos.x, 0, pos.z).angleTo(dir) + Math.PI / 2,
                 cameraHeight: pos.y,
+                distance: pos.length(),
             }));
         }, 200),
         [],
@@ -98,7 +101,7 @@ export const SceneBase: React.FC<SceneBaseProps> = ({ sceneId, children }) => {
             { children }
             {/* <axesHelper scale={[500, 500, 500]} /> */}
             <EffectComposer depthBuffer autoClear disableNormalPass>
-                {isNight ? <Bloom luminanceThreshold={0.2} luminanceSmoothing={0.1} /> : <React.Fragment />}
+                {isNight ? <Bloom luminanceThreshold={0} luminanceSmoothing={0.0001} /> : <React.Fragment />}
             </EffectComposer>
             {isNight ? (
                 <React.Fragment>

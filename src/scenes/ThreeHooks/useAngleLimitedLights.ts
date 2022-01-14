@@ -1,5 +1,6 @@
 import { useFrame, useThree } from '@react-three/fiber';
 import { useMemo } from 'react';
+import { directedAngle } from 'scenes/directedAngle';
 import {
     BufferGeometry,
     Mesh,
@@ -8,10 +9,7 @@ import {
     Vector3,
 } from 'three';
 import { degToRad } from 'three/src/math/MathUtils';
-import { objHasOwnProperties } from 'utils';
 import { LightsDescriptor } from './lightsDescriptor';
-
-const directedAngle = (a: Vector3, b: Vector3): number => Math.atan2(a.x * b.z - a.z * b.x, a.x * b.x + a.z * b.z);
 
 export const useAngleLimitedLights = ({ angleLimitedLights }: LightsDescriptor) => {
     const state = useThree();

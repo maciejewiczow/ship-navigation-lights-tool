@@ -85,12 +85,25 @@ export const Controls: React.FC<ControlsProps> = ({ sceneId, className }) => {
                         type="range"
                         min="0"
                         max="60"
-                        step="1"
+                        step="0.1"
                         value={params.cameraHeight}
                         onChange={e => dispatch(updateSceneParams({ cameraHeight: +e.target.value }))}
                         disabled={params.freeCameraEnabled}
                     />
                     &nbsp;{Math.round(params.cameraHeight)}m
+                </div>
+                <Form.Label>Odległość</Form.Label>
+                <div>
+                    <Form.Control
+                        type="range"
+                        min="65"
+                        max="600"
+                        step="1"
+                        value={params.distance}
+                        onChange={e => dispatch(updateSceneParams({ distance: +e.target.value }))}
+                        disabled={params.freeCameraEnabled}
+                    />
+                    &nbsp;{Math.round(params.distance)}m
                 </div>
             </FormContentWrapper>
         </Form>
