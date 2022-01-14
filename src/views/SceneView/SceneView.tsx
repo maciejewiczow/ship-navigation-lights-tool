@@ -16,6 +16,7 @@ import {
     Controls,
     Html,
 } from './parts';
+import { SceneLoader } from './SceneLoader';
 
 interface SceneViewRouteParams {
     id?: string;
@@ -57,7 +58,7 @@ export const SceneView: React.FC = () => {
                 </ControlsDrawer>
             )}
             <Canvas camera={{ position: [140, 26, -262], aspect: 70, near: 0.01, far: 100000 }} gl={{ logarithmicDepthBuffer: true }}>
-                <Suspense fallback={<Html center><Loader /></Html>}>
+                <Suspense fallback={<SceneLoader />}>
                     <SceneBase sceneId={id}>
                         <Model />
                     </SceneBase>

@@ -24,9 +24,6 @@ export const useAngleLimitedLights = ({ angleLimitedLights }: LightsDescriptor) 
         const lightNames = Object.keys(angleLimitedLights);
 
         scene.traverse(obj => {
-            if (!obj.name.startsWith('bow_thing'))
-                console.log(obj.name);
-
             const names = lightNames.filter(lightName => obj.name.startsWith(lightName));
             if (
                 obj instanceof Mesh
@@ -49,8 +46,6 @@ export const useAngleLimitedLights = ({ angleLimitedLights }: LightsDescriptor) 
                 light.userData.angleRelativeTo = obj;
         }
 
-        console.log(res);
-        console.log(scene);
         return res;
     }, [angleLimitedLights, state]);
 
