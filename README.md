@@ -2,6 +2,9 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Live demo
+The project is live on [github pages](https://maciejewiczow.github.io/ship-navigation-lights-tool/).
+
 ## Available Scripts
 
 In the project directory, you can run:

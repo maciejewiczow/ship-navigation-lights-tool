@@ -109,7 +109,15 @@ export const SceneBase: React.FC<SceneBaseProps> = ({ sceneId, children }) => {
                 </React.Fragment>
             ) : (
                 <React.Fragment>
-                    <Sky scale={10000} inclination={0.65} rayleigh={0.1} mieCoefficient={0.02} azimuth={(3 * Math.PI) / 2} turbidity={0.05} />
+                    <Sky
+                        // @ts-ignore - wrong typings
+                        scale={10000}
+                        inclination={0.65}
+                        rayleigh={0.1}
+                        mieCoefficient={0.02}
+                        azimuth={(3 * Math.PI) / 2}
+                        turbidity={0.05}
+                    />
                     <WaterReplacer placeholderName="Woda" waterColor="#000000" sunColor="#222222" />
                     <ambientLight intensity={0.4} />
                     <pointLight position={[100, 100, 100]} />

@@ -5,7 +5,7 @@ import { InvisibleLink } from 'components/InvisibleLink';
 
 export const Wrapper = styled.div`
     padding: 12px 24px;
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
 `;
 
@@ -25,11 +25,12 @@ export const SearchInput = styled.input`
 export const CardsWrapper = styled.div`
     display: flex;
     flex-flow: row wrap;
+    justify-content: center;
 
     > * {
         width: 300px;
-        margin-right: 8px;
-        margin-bottom: 8px;
+        margin-right: 16px;
+        margin-bottom: 16px;
     }
 `;
 

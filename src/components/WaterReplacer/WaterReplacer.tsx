@@ -12,6 +12,7 @@ import {
     Vector3,
     PlaneGeometry,
     Vector2,
+    ShaderMaterial,
 } from 'three';
 import { WaterOptions } from 'three-stdlib';
 import defaultWaterNormalsPath from 'assets/waternormals.jpg';
@@ -140,7 +141,7 @@ export const WaterReplacer: React.FC<WaterProps> = ({ placeholderName, waterNorm
     );
 
     useFrame((_, delta) => {
-        if (ref.current?.material)
+        if (ref.current?.material && ref.current?.material instanceof ShaderMaterial)
             ref.current.material.uniforms.time.value += delta;
     });
 
