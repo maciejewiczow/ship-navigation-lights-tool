@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.js": "/ship-navigation-lights-tool/static/js/main.f5d7f57b.chunk.js",
-    "main.js.map": "/ship-navigation-lights-tool/static/js/main.f5d7f57b.chunk.js.map",
+    "main.js": "/ship-navigation-lights-tool/static/js/main.34e9480e.chunk.js",
+    "main.js.map": "/ship-navigation-lights-tool/static/js/main.34e9480e.chunk.js.map",
     "runtime-main.js": "/ship-navigation-lights-tool/static/js/runtime-main.6dee886e.js",
     "runtime-main.js.map": "/ship-navigation-lights-tool/static/js/runtime-main.6dee886e.js.map",
     "static/css/2.f2512455.chunk.css": "/ship-navigation-lights-tool/static/css/2.f2512455.chunk.css",
@@ -37,6 +37,6 @@
     "static/js/runtime-main.6dee886e.js",
     "static/css/2.f2512455.chunk.css",
     "static/js/2.a064807e.chunk.js",
-    "static/js/main.f5d7f57b.chunk.js"
+    "static/js/main.34e9480e.chunk.js"
   ]
 }
