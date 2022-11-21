@@ -1,4 +1,4 @@
-import { LightsDescriptor } from 'scenes/ThreeHooks/lightsDescriptor';
+import { LightsDescriptor } from 'scenes/threeHooks/lightsDescriptor';
 
 export default {
     angleLimitedLights: {},

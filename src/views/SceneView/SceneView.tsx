@@ -1,21 +1,14 @@
 import React, { Suspense, useEffect, useState } from 'react';
 import { Redirect, useParams } from 'react-router';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { AiOutlineControl } from 'react-icons/ai';
-import { Loader } from 'components/Loader';
 import sceneMap from 'scenes';
 import { loadScene } from 'store/Scenes/actions';
 import { SceneBase } from 'scenes/SceneBase';
 import { Canvas } from 'components/Canvas';
 import { useQueryParams } from 'utils/hooks';
 import { lightSetParamName, noControlsParamName } from 'appConstants';
-import {
-    ControlsDrawer,
-    DrawerHandle,
-    Wrapper,
-    Controls,
-    Html,
-} from './parts';
+import { ControlsDrawer, DrawerHandle, Wrapper, Controls } from './parts';
 import { SceneLoader } from './SceneLoader';
 
 interface SceneViewRouteParams {

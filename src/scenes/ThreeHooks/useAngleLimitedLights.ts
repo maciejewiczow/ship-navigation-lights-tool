@@ -22,7 +22,7 @@ export const useAngleLimitedLights = ({ angleLimitedLights }: LightsDescriptor) 
         const lightNames = Object.keys(angleLimitedLights);
 
         scene.traverse(obj => {
-            const names = lightNames.filter(lightName => obj.name.startsWith(lightName));
+            const names = lightNames.filter(lightName => obj.name.toLowerCase().startsWith(lightName.toLowerCase()));
             if (
                 obj instanceof Mesh
                     && obj.material instanceof MeshStandardMaterial
@@ -80,27 +80,3 @@ export const useAngleLimitedLights = ({ angleLimitedLights }: LightsDescriptor) 
         }
     });
 };
-
-// const useSceneEmissiveObjects = () => {
-//     const scene = useThree(s => s.scene);
-
-//     return useMemo(() => {
-//         const objs: MutableRefObject<Mesh<BufferGeometry, MeshStandardMaterial>>[] = [];
-
-//         scene.traverse(obj => {
-//             if (
-//                 obj instanceof Mesh
-//                 && obj.material instanceof MeshStandardMaterial
-//                 && (
-//                     obj.material.emissive.r > 0
-//                     || obj.material.emissive.g > 0
-//                     || obj.material.emissive.b > 0
-//                 )
-//                 && obj.material.emissiveIntensity > 0
-//             )
-//                 objs.push({ current: obj });
-//         });
-
-//         return objs;
-//     }, [scene]);
-// };

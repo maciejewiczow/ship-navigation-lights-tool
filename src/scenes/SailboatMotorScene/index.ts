@@ -4,8 +4,8 @@ import { SailboatMotorScene } from './SailboatMotorScene';
 import { SceneDescriptor } from '../sceneDescriptor';
 
 export const descriptor: SceneDescriptor = {
-    name: 'Statek o długości powyżej 12m o napędzie mechanicznym w drodze',
-    id: 'over-12m-motor-in-route',
+    name: 'Statek o napędzie mechanicznym w drodze',
+    id: 'motor-in-route',
     iconPath,
     component: SailboatMotorScene,
     lightsDescriptor,

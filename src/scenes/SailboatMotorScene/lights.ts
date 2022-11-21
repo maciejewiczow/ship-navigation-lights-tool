@@ -1,4 +1,4 @@
-import { LightsDescriptor } from 'scenes/ThreeHooks/lightsDescriptor';
+import { LightsDescriptor } from 'scenes/threeHooks/lightsDescriptor';
 
 export default {
     angleLimitedLights: {
@@ -12,7 +12,7 @@ export default {
             minVisibilityAngleDeg: -112.5,
             maxVisibilityAngleDeg: 5,
         },
-        Topowe: {
+        Masztowe: {
             angleRelativeTo: 'Statek',
             minVisibilityAngleDeg: -112.5,
             maxVisibilityAngleDeg: 112.5,

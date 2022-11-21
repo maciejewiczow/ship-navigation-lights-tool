@@ -1,4 +1,4 @@
-import React, { useCallback, useLayoutEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFrame, useThree } from '@react-three/fiber';
 import { Sky, OrbitControls, useTexture } from '@react-three/drei';
@@ -9,8 +9,8 @@ import { WaterReplacer } from 'components/WaterReplacer';
 import { updateSceneParams } from 'store/Scenes/actions';
 import { DoubleSide, Vector3 } from 'three';
 import sceneMap from 'scenes';
-import { useAngleLimitedLights } from './ThreeHooks/useAngleLimitedLights';
-import { emptyDescriptor } from './ThreeHooks/lightsDescriptor';
+import { useAngleLimitedLights } from './threeHooks/useAngleLimitedLights';
+import { emptyDescriptor } from './threeHooks/lightsDescriptor';
 
 interface SceneBaseProps {
     sceneId: string;
@@ -27,6 +27,12 @@ export const SceneBase: React.FC<SceneBaseProps> = ({ sceneId, children }) => {
         angle,
         distance,
     } = useSelector(currentSceneParams);
+
+    useEffect(() => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        window.scene = scene;
+    }, [scene]);
 
     const skyTexture = useTexture(starsEnvFile);
 
@@ -127,7 +133,7 @@ export const SceneBase: React.FC<SceneBaseProps> = ({ sceneId, children }) => {
                     rotateSpeed={0.9}
                     maxPolarAngle={Math.PI / 2}
                     minDistance={40}
-                    maxDistance={5200}
+                    maxDistance={1000}
                     onChange={handleCameraMovement}
                 />
             )}
