@@ -1,19 +1,13 @@
 import React, { useCallback, useLayoutEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFrame, useThree } from '@react-three/fiber';
-import { Environment, Sky, OrbitControls } from '@react-three/drei';
-import { Bloom, EffectComposer } from '@react-three/postprocessing';
+import { Sky, OrbitControls, useTexture } from '@react-three/drei';
 import debounce from 'lodash/debounce';
-import starsPx from 'assets/Real Stars Skybox/px.png';
-import starsNx from 'assets/Real Stars Skybox/nx.png';
-import starsPy from 'assets/Real Stars Skybox/py.png';
-import starsNy from 'assets/Real Stars Skybox/ny.png';
-import starsPz from 'assets/Real Stars Skybox/pz.png';
-import starsNz from 'assets/Real Stars Skybox/nz.png';
+import starsEnvFile from 'assets/starmap.png';
 import { currentSceneParams } from 'store/Scenes/selectors';
 import { WaterReplacer } from 'components/WaterReplacer';
 import { updateSceneParams } from 'store/Scenes/actions';
-import { Vector3 } from 'three';
+import { DoubleSide, Vector3 } from 'three';
 import sceneMap from 'scenes';
 import { useAngleLimitedLights } from './ThreeHooks/useAngleLimitedLights';
 import { emptyDescriptor } from './ThreeHooks/lightsDescriptor';
@@ -33,6 +27,8 @@ export const SceneBase: React.FC<SceneBaseProps> = ({ sceneId, children }) => {
         angle,
         distance,
     } = useSelector(currentSceneParams);
+
+    const skyTexture = useTexture(starsEnvFile);
 
     const model = scene.getObjectByName('Statek');
     const target = useMemo(() => new Vector3(0, 0, 0), []);
@@ -98,19 +94,19 @@ export const SceneBase: React.FC<SceneBaseProps> = ({ sceneId, children }) => {
 
     return (
         <React.Fragment>
-            { children }
-            {/* <axesHelper scale={[500, 500, 500]} /> */}
-            <EffectComposer depthBuffer autoClear disableNormalPass>
-                {isNight ? <Bloom luminanceThreshold={0} luminanceSmoothing={0.0001} /> : <React.Fragment />}
-            </EffectComposer>
+            {children}
             {isNight ? (
-                <React.Fragment>
-                    {backgroundEnabled && <Environment files={[starsPx, starsNx, starsPy, starsNy, starsPz, starsNz]} background />}
-                </React.Fragment>
+                backgroundEnabled && (
+                    <mesh>
+                        <sphereBufferGeometry args={[100000]} />
+                        <meshBasicMaterial map={skyTexture} side={DoubleSide} />
+                    </mesh>
+                )
             ) : (
                 <React.Fragment>
                     <Sky
-                        // @ts-ignore - wrong typings
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore - wrong typings (scale is not in props)
                         scale={10000}
                         inclination={0.65}
                         rayleigh={0.1}

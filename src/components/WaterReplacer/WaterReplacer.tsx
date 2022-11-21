@@ -109,8 +109,6 @@ export const WaterReplacer: React.FC<WaterProps> = ({ placeholderName, waterNorm
     const waterNormals = useLoader(TextureLoader, waterNormalsPath ?? defaultWaterNormalsPath);
     const placeholder = scene.getObjectByName(placeholderName);
 
-    console.log(scene);
-
     useLayoutEffect(() => {
         if (placeholder)
             placeholder.visible = false;
@@ -146,15 +144,6 @@ export const WaterReplacer: React.FC<WaterProps> = ({ placeholderName, waterNorm
     });
 
     return (
-        <React.Fragment>
-            <water3D ref={ref} args={[waterGeometry, config]} />
-            {/* <Plane
-                args={[1e4, 1e4, 1e3 / 4, 1e3 / 4]}
-                position={placeholder?.position && [placeholder.position.x, placeholder.position.y - 10, placeholder.position.z]}
-                rotation-x={-Math.PI / 2}
-            >
-                <meshPhongMaterial attach="material" color="#000000" />
-            </Plane> */}
-        </React.Fragment>
+        <water3D ref={ref} args={[waterGeometry, config]} />
     );
 };
