@@ -47,7 +47,7 @@ export const NoResultsWrapper = styled.div`
 export const NoResultsIcon = styled(ReactComponent)`
     max-width: 200px;
     max-height: 200px;
-    margin-bottom: 21px;
+    margin-bottom: 22px;
     margin-right: 14px;
 `;
 
