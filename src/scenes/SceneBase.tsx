@@ -14,6 +14,7 @@ import { WaterReplacer } from '~/components/WaterReplacer';
 import { sceneMap } from '~/scenes';
 import { updateSceneParams } from '~/store/Scenes/actions';
 import { currentSceneParams } from '~/store/Scenes/selectors';
+import { directedAngle } from './directedAngle';
 import { emptyDescriptor } from './threeHooks/lightsDescriptor';
 import { useAngleLimitedLights } from './threeHooks/useAngleLimitedLights';
 
@@ -53,7 +54,7 @@ export const SceneBase: React.FC<SceneBaseProps> = ({ sceneId, children }) => {
             }
 
             const dir =
-                model?.getWorldDirection(new Vector3()) ?? new Vector3(1, 0, 0);
+                model?.getWorldDirection(new Vector3()) ?? new Vector3(0, 0, 1);
 
             const len = camera.position.length();
             const pos = dir
@@ -87,12 +88,18 @@ export const SceneBase: React.FC<SceneBaseProps> = ({ sceneId, children }) => {
             const pos = camera.position;
 
             const dir =
-                model?.getWorldDirection(new Vector3()) ?? new Vector3(1, 0, 0);
+                model?.getWorldDirection(new Vector3()) ?? new Vector3(0, 0, 1);
 
             dispatch(
                 updateSceneParams({
                     angle:
-                        new Vector3(pos.x, 0, pos.z).angleTo(dir) + Math.PI / 2,
+                        directedAngle(
+                            new Vector3(pos.x, 0, pos.z),
+                            dir.applyAxisAngle(
+                                new Vector3(0, 1, 0),
+                                Math.PI / 2,
+                            ),
+                        ) + Math.PI,
                     cameraHeight: pos.y,
                     distance: pos.length(),
                 }),
