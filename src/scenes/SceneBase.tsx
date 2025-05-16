@@ -15,7 +15,7 @@ import { sceneMap } from '~/scenes';
 import { updateSceneParams } from '~/store/Scenes/actions';
 import { currentSceneParams } from '~/store/Scenes/selectors';
 import { directedAngle } from './directedAngle';
-import { emptyDescriptor } from './threeHooks/lightsDescriptor';
+import { emptyDetails } from './threeHooks/sceneDetails';
 import { useAngleLimitedLights } from './threeHooks/useAngleLimitedLights';
 
 interface SceneBaseProps extends PropsWithChildren {
@@ -36,12 +36,12 @@ export const SceneBase: React.FC<SceneBaseProps> = ({ sceneId, children }) => {
 
     const skyTexture = useTexture(starsEnvFile);
 
-    const model = scene.getObjectByName('Statek');
+    const sceneDetails = sceneMap.get(sceneId)?.details ?? emptyDetails;
+
+    const model = scene.getObjectByName(sceneDetails.boatObjectName);
     const target = useMemo(() => new Vector3(0, 0, 0), []);
 
-    useAngleLimitedLights(
-        sceneMap.get(sceneId)?.lightsDescriptor ?? emptyDescriptor,
-    );
+    useAngleLimitedLights(sceneDetails.angleLimitedLights, model);
 
     useLayoutEffect(() => {
         if (!freeCameraEnabled) {
@@ -139,7 +139,7 @@ export const SceneBase: React.FC<SceneBaseProps> = ({ sceneId, children }) => {
                         turbidity={0.05}
                     />
                     <WaterReplacer
-                        placeholderName="Woda"
+                        placeholderName={sceneDetails.waterObjectName}
                         waterColor="#000000"
                         sunColor="#222222"
                     />

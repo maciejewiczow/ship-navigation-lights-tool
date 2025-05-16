@@ -1,10 +1,10 @@
 import { FunctionComponent } from 'react';
-import { LightsDescriptor } from './threeHooks/lightsDescriptor';
+import { SceneDetails } from './threeHooks/sceneDetails';
 
 export interface SceneDescriptor {
     name: string;
     id: string;
     iconPath: string;
     component: FunctionComponent;
-    lightsDescriptor: LightsDescriptor;
+    details: SceneDetails;
 }

@@ -9,30 +9,29 @@ import {
 } from 'three';
 import { degToRad } from 'three/src/math/MathUtils.js';
 import { directedAngle } from '~/scenes/directedAngle';
-import { LightsDescriptor } from './lightsDescriptor';
+import { SceneDetails } from './sceneDetails';
 
-export const useAngleLimitedLights = ({
-    angleLimitedLights,
-}: LightsDescriptor) => {
-    const state = useThree();
+export const useAngleLimitedLights = (
+    angleLimitedLights: SceneDetails['angleLimitedLights'],
+    model: Object3D | undefined,
+) => {
+    const scene = useThree(s => s.scene);
 
     const lights = useMemo(() => {
-        const { scene } = state;
-
         const res: Mesh<BufferGeometry, MeshStandardMaterial>[] = [];
 
         const lightNames = Object.keys(angleLimitedLights);
 
         scene.traverse(obj => {
-            const names = lightNames.filter(lightName =>
+            const name = lightNames.find(lightName =>
                 obj.name.toLowerCase().startsWith(lightName.toLowerCase()),
             );
             if (
                 obj instanceof Mesh &&
                 obj.material instanceof MeshStandardMaterial &&
-                names.length > 0
+                name
             ) {
-                [obj.name] = names;
+                obj.name = name;
                 res.push(obj);
             }
         });
@@ -52,7 +51,8 @@ export const useAngleLimitedLights = ({
         }
 
         return res;
-    }, [angleLimitedLights, state]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [angleLimitedLights, scene, model]);
 
     useFrame(({ camera }) => {
         const cameraPos = camera.getWorldPosition(new Vector3());
