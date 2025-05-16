@@ -4,10 +4,14 @@ export interface AngleLimitedLight {
     maxVisibilityAngleDeg: number;
 }
 
-export interface LightsDescriptor {
+export interface SceneDetails {
     angleLimitedLights: Record<string, AngleLimitedLight>;
+    boatObjectName: string;
+    waterObjectName: string;
 }
 
-export const emptyDescriptor: LightsDescriptor = {
+export const emptyDetails: SceneDetails = {
     angleLimitedLights: {},
+    boatObjectName: 'Statek',
+    waterObjectName: 'Woda',
 };

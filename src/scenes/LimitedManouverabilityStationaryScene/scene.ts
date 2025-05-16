@@ -1,0 +1,7 @@
+import { SceneDetails } from '~/scenes/threeHooks/sceneDetails';
+
+export const sceneDetails: SceneDetails = {
+    angleLimitedLights: {},
+    boatObjectName: 'Statek',
+    waterObjectName: 'Woda',
+};

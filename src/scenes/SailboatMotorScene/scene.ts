@@ -1,6 +1,6 @@
-import { LightsDescriptor } from '~/scenes/threeHooks/lightsDescriptor';
+import { SceneDetails } from '~/scenes/threeHooks/sceneDetails';
 
-export const lightsDescriptor: LightsDescriptor = {
+export const sceneDetails: SceneDetails = {
     angleLimitedLights: {
         Burtowe_lewe: {
             angleRelativeTo: 'Statek',
@@ -23,4 +23,6 @@ export const lightsDescriptor: LightsDescriptor = {
             maxVisibilityAngleDeg: -112.5,
         },
     },
+    boatObjectName: 'Statek',
+    waterObjectName: 'Woda',
 };
