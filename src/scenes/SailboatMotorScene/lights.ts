@@ -1,6 +1,6 @@
-import { LightsDescriptor } from 'scenes/threeHooks/lightsDescriptor';
+import { LightsDescriptor } from '~/scenes/threeHooks/lightsDescriptor';
 
-export default {
+export const lightsDescriptor: LightsDescriptor = {
     angleLimitedLights: {
         Burtowe_lewe: {
             angleRelativeTo: 'Statek',
@@ -23,4 +23,4 @@ export default {
             maxVisibilityAngleDeg: -112.5,
         },
     },
-} as LightsDescriptor;
+};

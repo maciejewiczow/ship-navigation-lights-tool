@@ -1,1 +1,1 @@
-export { objHasOwnProperty, objHasOwnProperties } from './objHasOwnProperty';
+export { objHasOwnProperties, objHasOwnProperty } from './objHasOwnProperty';

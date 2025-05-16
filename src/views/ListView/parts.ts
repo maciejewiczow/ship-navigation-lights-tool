@@ -1,7 +1,7 @@
-import styled from 'styled-components';
-import { ReactComponent } from 'assets/undraw_No_data_re_kwbl.svg';
 import OriginalCard from 'react-bootstrap/esm/Card';
-import { InvisibleLink } from 'components/InvisibleLink';
+import styled from 'styled-components';
+import ReactComponent from '~/assets/undraw_No_data_re_kwbl.svg';
+import { InvisibleLink } from '~/components/InvisibleLink';
 
 export const Wrapper = styled.div`
     padding: 12px 24px;
@@ -51,7 +51,8 @@ export const NoResultsIcon = styled(ReactComponent)`
     margin-right: 14px;
 `;
 
-export const HorizontalCardBody = styled(OriginalCard.Body as any)`
+// @ts-expect-error same issue with bootstrap + drei
+export const HorizontalCardBody = styled(OriginalCard.Body)`
     display: flex;
     flex-flow: row nowrap;
     min-height: 130px;

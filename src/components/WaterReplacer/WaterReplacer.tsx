@@ -1,22 +1,15 @@
 import React, { useLayoutEffect, useMemo, useRef } from 'react';
+import { extend, useFrame, useLoader, useThree } from '@react-three/fiber';
 import {
-    extend,
-    Overwrite,
-    useFrame,
-    useLoader,
-    useThree,
-} from '@react-three/fiber';
-import {
-    TextureLoader,
-    RepeatWrapping,
-    Vector3,
     PlaneGeometry,
+    RepeatWrapping,
+    TextureLoader,
     Vector2,
-    ShaderMaterial,
+    Vector3,
 } from 'three';
 import { WaterOptions } from 'three-stdlib';
-import defaultWaterNormalsPath from 'assets/waternormals.jpg';
-import { Water3D, Water3DOptions } from './Water3D';
+import defaultWaterNormalsPath from '~/assets/waternormals.jpg';
+import { Water3D as Water3DClass, Water3DOptions } from './Water3D';
 
 // export const useWaterShader = (objName: string) => {
 //     const { scene } = useThree();
@@ -58,9 +51,10 @@ import { Water3D, Water3DOptions } from './Water3D';
 //     });
 // };
 
-extend({ Water3D });
+export const Water3D = extend(Water3DClass);
 
-interface WaterProps extends Partial<Overwrite<WaterOptions, { waterNormals: string }>> {
+interface WaterProps
+    extends Partial<Overwrite<WaterOptions, { waterNormals: string }>> {
     placeholderName: string;
 }
 
@@ -91,27 +85,25 @@ const defaultWaterConfig: Partial<Water3DOptions> = {
     ],
 };
 
-// TODO: add typing to <water>
-declare global {
-    // eslint-disable-next-line @typescript-eslint/no-namespace
-    namespace JSX {
-        interface IntrinsicElements {
-            water3D: any;
-        }
-    }
-}
-
 const waterGeometry = new PlaneGeometry(1e4, 1e4, 1e3 / 4, 1e3 / 4);
 
-export const WaterReplacer: React.FC<WaterProps> = ({ placeholderName, waterNormals: waterNormalsPath, ...rest }) => {
-    const ref = useRef<Water3D>();
+export const WaterReplacer: React.FC<WaterProps> = ({
+    placeholderName,
+    waterNormals: waterNormalsPath,
+    ...rest
+}) => {
+    const ref = useRef<Water3DClass>(null);
     const scene = useThree(s => s.scene);
-    const waterNormals = useLoader(TextureLoader, waterNormalsPath ?? defaultWaterNormalsPath);
+    const waterNormals = useLoader(
+        TextureLoader,
+        waterNormalsPath ?? defaultWaterNormalsPath,
+    );
     const placeholder = scene.getObjectByName(placeholderName);
 
     useLayoutEffect(() => {
-        if (placeholder)
+        if (placeholder) {
             placeholder.visible = false;
+        }
 
         if (ref.current && placeholder) {
             ref.current.position.copy(placeholder.position);
@@ -121,8 +113,9 @@ export const WaterReplacer: React.FC<WaterProps> = ({ placeholderName, waterNorm
         }
 
         return () => {
-            if (placeholder)
+            if (placeholder) {
                 placeholder.visible = true;
+            }
         };
     }, [placeholder]);
 
@@ -139,11 +132,15 @@ export const WaterReplacer: React.FC<WaterProps> = ({ placeholderName, waterNorm
     );
 
     useFrame((_, delta) => {
-        if (ref.current?.material && ref.current?.material instanceof ShaderMaterial)
+        if (ref.current?.material) {
             ref.current.material.uniforms.time.value += delta;
+        }
     });
 
     return (
-        <water3D ref={ref} args={[waterGeometry, config]} />
+        <Water3D
+            ref={ref}
+            args={[waterGeometry, config]}
+        />
     );
 };

@@ -1,6 +1,7 @@
-import styled from 'styled-components';
 import Button from 'react-bootstrap/Button';
+import styled from 'styled-components';
 
+// @ts-expect-error issue with react-bootstrap+drei
 export const ButtonBase = styled(Button)`
     font-size: 24px;
     padding: 2px 8px;
@@ -10,23 +11,20 @@ export const ButtonBase = styled(Button)`
     }
 `;
 
-// Produces an internal TS error - union too complex to represent
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 export const DayButton = styled(ButtonBase)`
-    &.active, &:hover {
-        background-color: #FFD000;
-        border-color: #FFD000;
+    &.active,
+    &:hover {
+        background-color: #ffd000;
+        border-color: #ffd000;
         color: #505050;
     }
-    border-color: #AF8C00;
-    color: #AF8C00;
+    border-color: #af8c00;
+    color: #af8c00;
 `;
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 export const NightButton = styled(ButtonBase)`
-    &.active, &:hover {
+    &.active,
+    &:hover {
         background-color: #260072;
         border-color: #260072;
     }

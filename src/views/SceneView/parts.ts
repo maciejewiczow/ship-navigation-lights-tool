@@ -1,6 +1,6 @@
-import styled, { css } from 'styled-components';
-import { Controls as OriginalControls } from 'components/Controls';
 import { Html as OriginalHtml } from '@react-three/drei';
+import styled, { css } from 'styled-components';
+import { Controls as OriginalControls } from '~/components/Controls';
 
 export const Wrapper = styled.div`
     width: 100vw;
@@ -24,7 +24,10 @@ export const DrawerHandle = styled.div`
     transition: all 0.2s ease-in-out;
 `;
 
-export const ControlsDrawer = styled.div<{ open: boolean; handleHeight: number }>`
+export const ControlsDrawer = styled.div<{
+    open: boolean;
+    handleHeight: number;
+}>`
     position: absolute;
     right: 0;
     top: 0;
@@ -36,9 +39,11 @@ export const ControlsDrawer = styled.div<{ open: boolean; handleHeight: number }
         height: ${({ handleHeight }) => handleHeight}px;
     }
 
-    ${({ open, handleHeight }) => !open && css`
-        transform: translateY(calc(-100% + ${handleHeight}px));
-    `}
+    ${({ open, handleHeight }) =>
+        !open &&
+        css`
+            transform: translateY(calc(-100% + ${handleHeight}px));
+        `}
 `;
 
 export const Controls = styled(OriginalControls)`

@@ -3,20 +3,20 @@ import Card from 'react-bootstrap/Card';
 import { BiLinkExternal } from 'react-icons/bi';
 import { useDispatch } from 'react-redux';
 import { push } from 'redux-first-history';
-import sceneMap from 'scenes';
-import { withDefault } from 'utils/withDefault';
-import { loadScene } from 'store/Scenes/actions';
+import { sceneMap } from '~/scenes';
+import { loadScene } from '~/store/Scenes/actions';
+import { withDefault } from '~/utils/withDefault';
 import {
-    Header,
-    Wrapper,
-    CardsWrapper,
-    SearchInput,
-    NoResultsWrapper,
-    NoResultsIcon,
-    HorizontalCardBody,
     CardStyleWrapper,
-    WholeCardLink,
+    CardsWrapper,
+    Header,
+    HorizontalCardBody,
     InnerLink,
+    NoResultsIcon,
+    NoResultsWrapper,
+    SearchInput,
+    WholeCardLink,
+    Wrapper,
 } from './parts';
 
 export const ListView: React.FC = () => {
@@ -25,8 +25,9 @@ export const ListView: React.FC = () => {
     const inputRef = useRef<HTMLInputElement>(null);
 
     const onKeyPress = useCallback((e: KeyboardEvent) => {
-        if (e.key === 'Escape' && inputRef.current === document.activeElement)
+        if (e.key === 'Escape' && inputRef.current === document.activeElement) {
             setSearchText('');
+        }
     }, []);
 
     useEffect(() => {
@@ -40,16 +41,14 @@ export const ListView: React.FC = () => {
     const openSceneInNewWindow = (id: string) => (e: React.MouseEvent) => {
         e.preventDefault();
 
-        if (!sceneMap.has(id))
+        if (!sceneMap.has(id)) {
             return;
+        }
 
-        // checked above
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         dispatch(loadScene(sceneMap.get(id)!));
         window.open(
             `/scene/${id}?noControls`,
             'scene',
-            // eslint-disable-next-line no-restricted-globals
             `height=${screen.availHeight},width=${screen.availWidth},fullscreen=yes,toolbar=no,menubar=no,scrollbars=no,resizable=yes,location=no,directories=no,status=no`,
         );
 
@@ -68,35 +67,38 @@ export const ListView: React.FC = () => {
                 />
             </Header>
             <CardsWrapper>
-                {
-                    withDefault(
-                        Array.from(sceneMap.values())
-                            .filter(({ name }) => name.toLowerCase().includes(searchText.trim().toLowerCase()))
-                            .map(({ name, id, iconPath }) => (
-                                <CardStyleWrapper key={id}>
-                                    <Card>
-                                        <WholeCardLink to={`/scene/${id}`} />
-                                        <Card.Img variant="top" src={iconPath} />
-                                        <HorizontalCardBody>
-                                            <Card.Text>{name}</Card.Text>
-                                            <InnerLink
-                                                title="Otwórz w nowym oknie"
-                                                onClick={openSceneInNewWindow(id)}
-                                            >
-                                                <BiLinkExternal />
-                                            </InnerLink>
-                                        </HorizontalCardBody>
-                                    </Card>
-                                </CardStyleWrapper>
-                            )),
-                        (
-                            <NoResultsWrapper>
-                                <NoResultsIcon />
-                                <h2>Pusto</h2>
-                            </NoResultsWrapper>
-                        ),
-                    )
-                }
+                {withDefault(
+                    Array.from(sceneMap.values())
+                        .filter(({ name }) =>
+                            name
+                                .toLowerCase()
+                                .includes(searchText.trim().toLowerCase()),
+                        )
+                        .map(({ name, id, iconPath }) => (
+                            <CardStyleWrapper key={id}>
+                                <Card>
+                                    <WholeCardLink to={`/scene/${id}`} />
+                                    <Card.Img
+                                        variant="top"
+                                        src={iconPath}
+                                    />
+                                    <HorizontalCardBody>
+                                        <Card.Text>{name}</Card.Text>
+                                        <InnerLink
+                                            title="Otwórz w nowym oknie"
+                                            onClick={openSceneInNewWindow(id)}
+                                        >
+                                            <BiLinkExternal />
+                                        </InnerLink>
+                                    </HorizontalCardBody>
+                                </Card>
+                            </CardStyleWrapper>
+                        )),
+                    <NoResultsWrapper>
+                        <NoResultsIcon />
+                        <h2>Pusto</h2>
+                    </NoResultsWrapper>,
+                )}
             </CardsWrapper>
         </Wrapper>
     );

@@ -1,5 +1,5 @@
-import { SceneDescriptor } from 'scenes/sceneDescriptor';
-import { SceneParams, SceneState } from './store';
+import { SceneDescriptor } from '~/scenes/sceneDescriptor';
+import { SceneParams } from './store';
 
 export enum SceneActionType {
     loadScene = 'scenes/LOAD',
@@ -7,10 +7,12 @@ export enum SceneActionType {
     updateLightSet = 'scenes/UPDATE_LIGHT_SET',
 }
 
-export type SceneAction = {
-    type: SceneActionType.loadScene;
-    scene: SceneDescriptor;
-} | {
-    type: SceneActionType.updateParams;
-    params: Partial<SceneParams>;
-};
+export type SceneAction =
+    | {
+          type: SceneActionType.loadScene;
+          scene: SceneDescriptor;
+      }
+    | {
+          type: SceneActionType.updateParams;
+          params: Partial<SceneParams>;
+      };

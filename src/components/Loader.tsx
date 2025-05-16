@@ -27,7 +27,7 @@ const AnimationWrapper = styled.div`
 
 const Box = styled.div<{ delay: string }>`
     background: transparent;
-    color:white;
+    color: white;
 
     animation: fade 2s infinite;
     animation-delay: ${({ delay }) => delay};
@@ -39,7 +39,8 @@ const Box = styled.div<{ delay: string }>`
         25% {
             background: white;
         }
-        50%, 100% {
+        50%,
+        100% {
             background: transparent;
         }
     }
@@ -48,8 +49,13 @@ const Box = styled.div<{ delay: string }>`
 export const Loader: React.FC<PropsWithChildren> = ({ children }) => (
     <Wrapper>
         <AnimationWrapper>
-            { /* eslint-disable-next-line react/no-array-index-key */ }
-            {Array.from({length:16}).map((_, i) => <Box key={i} delay={`${((i % 4) + Math.floor(i / 4)) * 140}ms`} />)}
+            {Array.from({ length: 16 }).map((_, i) => (
+                <Box
+                    // eslint-disable-next-line react/no-array-index-key
+                    key={i}
+                    delay={`${((i % 4) + Math.floor(i / 4)) * 140}ms`}
+                />
+            ))}
         </AnimationWrapper>
         <ChildrenWrapper>{children ?? 'Ładowanie...'}</ChildrenWrapper>
     </Wrapper>

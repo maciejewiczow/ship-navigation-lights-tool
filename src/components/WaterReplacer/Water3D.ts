@@ -17,17 +17,19 @@ export class Water3D extends Water {
 
         if (this.material instanceof ShaderMaterial) {
             this.material.onBeforeCompile = shader => {
-                if (!(this.material instanceof ShaderMaterial))
+                if (!(this.material instanceof ShaderMaterial)) {
                     return;
+                }
 
-                this.material.defines.HAS_WAVES = (options.waves?.length ?? 0) > 0;
+                this.material.defines.HAS_WAVES =
+                    (options.waves?.length ?? 0) > 0;
                 this.material.defines.WAVE_COUNT = options.waves?.length;
 
                 shader.uniforms.waves = {
                     value: options.waves,
                 };
 
-                shader.vertexShader = /* glsl */`
+                shader.vertexShader = /* glsl */ `
                 uniform mat4 textureMatrix;
                 uniform float time;
 
@@ -48,7 +50,7 @@ export class Water3D extends Water {
 
                 uniform Wave waves[WAVE_COUNT];
 
-                vec3 gerstnerWave (
+                vec3 gerstnerWave(
                     Wave wave,
                     vec3 vertCoords,
                     inout vec3 binormal,
@@ -150,7 +152,8 @@ export class Water3D extends Water {
             `;
             };
 
-            this.material.customProgramCacheKey = () => (options.waves?.length ?? 0).toString();
+            this.material.customProgramCacheKey = () =>
+                (options.waves?.length ?? 0).toString();
         }
     }
 }

@@ -6,7 +6,7 @@ import { descriptor as NotRespStatDescriptor } from './NotResponsibleStationaryS
 import { descriptor as SailboatMotorDescriptor } from './SailboatMotorScene';
 import { SceneDescriptor } from './sceneDescriptor';
 
-const sceneMap = new Map<string, SceneDescriptor>([
+export const sceneMap = new Map<string, SceneDescriptor>([
     [CargoShipDescriptor.id, CargoShipDescriptor],
     [LimitedMovingDescriptor.id, LimitedMovingDescriptor],
     [LimitedStatDescriptor.id, LimitedStatDescriptor],
@@ -14,5 +14,3 @@ const sceneMap = new Map<string, SceneDescriptor>([
     [NotRespStatDescriptor.id, NotRespStatDescriptor],
     [SailboatMotorDescriptor.id, SailboatMotorDescriptor],
 ]);
-
-export default sceneMap;

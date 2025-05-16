@@ -1,4 +1,4 @@
-import { SceneDescriptor } from 'scenes/sceneDescriptor';
+import { SceneDescriptor } from '~/scenes/sceneDescriptor';
 
 // TODO: Figure out how to implement scene-specific settings
 export interface SceneParams {

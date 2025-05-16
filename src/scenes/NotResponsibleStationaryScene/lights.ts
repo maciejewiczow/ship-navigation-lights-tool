@@ -1,5 +1,5 @@
-import { LightsDescriptor } from 'scenes/threeHooks/lightsDescriptor';
+import { LightsDescriptor } from '../threeHooks/lightsDescriptor';
 
-export default {
+export const lightsDescriptor: LightsDescriptor = {
     angleLimitedLights: {},
-} as LightsDescriptor;
+};
