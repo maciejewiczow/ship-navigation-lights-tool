@@ -1,5 +1,4 @@
-import { SceneDescriptor } from '~/scenes/sceneDescriptor';
-import { SceneParams } from './store';
+import { CurrentScene, SceneParams } from './store';
 
 export enum SceneActionType {
     loadScene = 'scenes/LOAD',
@@ -10,7 +9,7 @@ export enum SceneActionType {
 export type SceneAction =
     | {
           type: SceneActionType.loadScene;
-          scene: SceneDescriptor;
+          scene: CurrentScene;
       }
     | {
           type: SceneActionType.updateParams;
