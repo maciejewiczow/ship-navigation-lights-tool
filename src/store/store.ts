@@ -1,9 +1,9 @@
 import { applyMiddleware, compose, createStore } from 'redux';
 import { createBrowserHistory } from 'history';
-import { routerMiddleware } from 'connected-react-router';
 import { Config, createStateSyncMiddleware, initStateWithPrevTab } from 'redux-state-sync';
 import createRootReducer from './reducers';
 import { SceneActionType } from './Scenes/constants';
+import { createReduxHistoryContext } from 'redux-first-history';
 
 const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
@@ -13,14 +13,18 @@ const config: Config = {
     prepareState: ({ router, ...state }) => state,
 };
 
-export const history = createBrowserHistory({ basename: '/ship-navigation-lights-tool' });
+export const history = createBrowserHistory();
+
+const { routerMiddleware, routerReducer } = createReduxHistoryContext({
+    history,
+});
 
 export const store = createStore(
-    createRootReducer(history),
+    createRootReducer(routerReducer),
     composeEnhancers(
         applyMiddleware(
-            routerMiddleware(history),
-            createStateSyncMiddleware(config),
+            routerMiddleware,
+            createStateSyncMiddleware(config) as any,
         ),
     ),
 );

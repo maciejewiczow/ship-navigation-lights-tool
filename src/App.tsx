@@ -1,18 +1,17 @@
 import React from 'react';
-import { Route, Switch } from 'react-router';
-import { ConnectedRouter } from 'connected-react-router';
-
+import { Route, Routes } from 'react-router';
+import { HistoryRouter } from 'redux-first-history/rr6'
 import * as Views from './views';
 import { history } from './store';
 
 const App: React.FC = () => (
-    <ConnectedRouter history={history}>
-        <Switch>
-            <Route path="/controls" component={Views.ControlsView} />
-            <Route path="/scene/:id" component={Views.SceneView} />
-            <Route path="/" component={Views.ListView} />
-        </Switch>
-    </ConnectedRouter>
+    <HistoryRouter history={history}>
+        <Routes>
+            <Route path="/controls" ><Views.ControlsView /></Route>
+            <Route path="/scene/:id" ><Views.SceneView /></Route>
+            <Route path="/" ><Views.ListView /></Route>
+        </Routes>
+    </HistoryRouter>
 );
 
 export default App;

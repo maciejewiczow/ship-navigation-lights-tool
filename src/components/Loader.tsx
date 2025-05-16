@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
@@ -45,11 +45,11 @@ const Box = styled.div<{ delay: string }>`
     }
 `;
 
-export const Loader: React.FC = ({ children }) => (
+export const Loader: React.FC<PropsWithChildren> = ({ children }) => (
     <Wrapper>
         <AnimationWrapper>
             { /* eslint-disable-next-line react/no-array-index-key */ }
-            {new Array(16).fill(0).map((_, i) => <Box key={i} delay={`${((i % 4) + Math.floor(i / 4)) * 140}ms`} />)}
+            {Array.from({length:16}).map((_, i) => <Box key={i} delay={`${((i % 4) + Math.floor(i / 4)) * 140}ms`} />)}
         </AnimationWrapper>
         <ChildrenWrapper>{children ?? 'Ładowanie...'}</ChildrenWrapper>
     </Wrapper>

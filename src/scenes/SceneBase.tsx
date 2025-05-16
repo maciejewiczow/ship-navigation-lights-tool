@@ -1,8 +1,8 @@
-import React, { useCallback, useEffect, useLayoutEffect, useMemo } from 'react';
+import React, { PropsWithChildren, useCallback, useEffect, useLayoutEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFrame, useThree } from '@react-three/fiber';
 import { Sky, OrbitControls, useTexture } from '@react-three/drei';
-import debounce from 'lodash/debounce';
+import {debounce} from 'lodash';
 import starsEnvFile from 'assets/starmap.png';
 import { currentSceneParams } from 'store/Scenes/selectors';
 import { WaterReplacer } from 'components/WaterReplacer';
@@ -12,7 +12,7 @@ import sceneMap from 'scenes';
 import { useAngleLimitedLights } from './threeHooks/useAngleLimitedLights';
 import { emptyDescriptor } from './threeHooks/lightsDescriptor';
 
-interface SceneBaseProps {
+interface SceneBaseProps extends PropsWithChildren {
     sceneId: string;
 }
 

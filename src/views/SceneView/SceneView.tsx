@@ -1,5 +1,5 @@
 import React, { Suspense, useEffect, useState } from 'react';
-import { Redirect, useParams } from 'react-router';
+import { Navigate, useParams } from 'react-router';
 import { useDispatch } from 'react-redux';
 import { AiOutlineControl } from 'react-icons/ai';
 import sceneMap from 'scenes';
@@ -11,7 +11,7 @@ import { lightSetParamName, noControlsParamName } from 'appConstants';
 import { ControlsDrawer, DrawerHandle, Wrapper, Controls } from './parts';
 import { SceneLoader } from './SceneLoader';
 
-interface SceneViewRouteParams {
+type SceneViewRouteParams = {
     id?: string;
 }
 
@@ -33,7 +33,7 @@ export const SceneView: React.FC = () => {
     }, [dispatch, id]);
 
     if (!id || !sceneMap.has(id))
-        return <Redirect to="/" />;
+        return <Navigate to="/" />;
 
     const Model = sceneMap.get(id)?.component ?? React.Fragment;
 

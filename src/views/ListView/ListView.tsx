@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Card from 'react-bootstrap/Card';
 import { BiLinkExternal } from 'react-icons/bi';
 import { useDispatch } from 'react-redux';
-import { push } from 'connected-react-router';
+import { push } from 'redux-first-history';
 import sceneMap from 'scenes';
 import { withDefault } from 'utils/withDefault';
 import { loadScene } from 'store/Scenes/actions';

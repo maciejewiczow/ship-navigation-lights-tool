@@ -51,7 +51,7 @@ export const NoResultsIcon = styled(ReactComponent)`
     margin-right: 14px;
 `;
 
-export const HorizontalCardBody = styled(OriginalCard.Body)`
+export const HorizontalCardBody = styled(OriginalCard.Body as any)`
     display: flex;
     flex-flow: row nowrap;
     min-height: 130px;
