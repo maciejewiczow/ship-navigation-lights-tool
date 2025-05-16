@@ -1,4 +1,4 @@
-import { SceneDetails } from '../threeHooks/sceneDetails';
+import { SceneDetails } from '../ThreeHooks/sceneDetails';
 
 export const sceneDetails: SceneDetails = {
     angleLimitedLights: {},

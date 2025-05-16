@@ -15,8 +15,8 @@ import { sceneMap } from '~/scenes';
 import { updateSceneParams } from '~/store/Scenes/actions';
 import { currentSceneParams } from '~/store/Scenes/selectors';
 import { directedAngle } from './directedAngle';
-import { defaultDetails } from './threeHooks/sceneDetails';
-import { useAngleLimitedLights } from './threeHooks/useAngleLimitedLights';
+import { defaultDetails } from './ThreeHooks/sceneDetails';
+import { useAngleLimitedLights } from './ThreeHooks/useAngleLimitedLights';
 
 interface SceneBaseProps extends PropsWithChildren {
     sceneId: string;

@@ -1,5 +1,5 @@
 import { FunctionComponent } from 'react';
-import { SceneDetails } from './threeHooks/sceneDetails';
+import { SceneDetails } from './ThreeHooks/sceneDetails';
 
 export interface SceneDescriptor {
     name: string;
