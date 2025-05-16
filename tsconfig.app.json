@@ -35,7 +35,7 @@
         "paths": {
             "~/*": ["./src/*"]
         },
-        "typeRoots": ["node_modules", "./src/typings"]
+        "typeRoots": ["./src/typings"]
     },
     "include": ["src"]
 }
