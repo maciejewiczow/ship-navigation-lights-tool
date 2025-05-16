@@ -25,4 +25,11 @@ export const sceneDetails: SceneDetails = {
     },
     boatObjectName: 'Statek',
     waterObjectName: 'Woda',
+    camera: {
+        deafultPosition: [10, 10, 10],
+        distanceLimits: {
+            min: 15,
+            max: 200,
+        },
+    },
 };

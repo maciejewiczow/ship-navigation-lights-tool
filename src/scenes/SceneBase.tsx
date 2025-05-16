@@ -6,7 +6,7 @@ import React, {
 } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { OrbitControls, Sky, useTexture } from '@react-three/drei';
-import { useFrame, useThree } from '@react-three/fiber';
+import { useThree } from '@react-three/fiber';
 import { debounce } from 'lodash';
 import { DoubleSide, Vector3 } from 'three';
 import starsEnvFile from '~/assets/starmap.png';
@@ -15,7 +15,7 @@ import { sceneMap } from '~/scenes';
 import { updateSceneParams } from '~/store/Scenes/actions';
 import { currentSceneParams } from '~/store/Scenes/selectors';
 import { directedAngle } from './directedAngle';
-import { emptyDetails } from './threeHooks/sceneDetails';
+import { defaultDetails } from './threeHooks/sceneDetails';
 import { useAngleLimitedLights } from './threeHooks/useAngleLimitedLights';
 
 interface SceneBaseProps extends PropsWithChildren {
@@ -36,7 +36,7 @@ export const SceneBase: React.FC<SceneBaseProps> = ({ sceneId, children }) => {
 
     const skyTexture = useTexture(starsEnvFile);
 
-    const sceneDetails = sceneMap.get(sceneId)?.details ?? emptyDetails;
+    const sceneDetails = sceneMap.get(sceneId)?.details ?? defaultDetails;
 
     const model = scene.getObjectByName(sceneDetails.boatObjectName);
     const target = useMemo(() => new Vector3(0, 0, 0), []);
@@ -108,12 +108,6 @@ export const SceneBase: React.FC<SceneBaseProps> = ({ sceneId, children }) => {
         [],
     );
 
-    useFrame(() => {
-        if (camera.position.y < 3) {
-            camera.position.y = 3;
-        }
-    });
-
     return (
         <>
             {children}
@@ -156,9 +150,9 @@ export const SceneBase: React.FC<SceneBaseProps> = ({ sceneId, children }) => {
                     enablePan={false}
                     enableDamping={false}
                     rotateSpeed={0.9}
-                    maxPolarAngle={Math.PI / 2}
-                    minDistance={40}
-                    maxDistance={1000}
+                    maxPolarAngle={Math.PI / 2 - 0.01}
+                    minDistance={sceneDetails.camera.distanceLimits.min}
+                    maxDistance={sceneDetails.camera.distanceLimits.max}
                     onChange={handleCameraMovement}
                 />
             )}

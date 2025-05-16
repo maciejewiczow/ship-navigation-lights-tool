@@ -35,7 +35,9 @@ export const SceneView: React.FC = () => {
         return <Navigate to="/" />;
     }
 
-    const Model = sceneMap.get(id)?.component ?? React.Fragment;
+    const descriptor = sceneMap.get(id);
+
+    const Model = descriptor?.component ?? React.Fragment;
 
     return (
         <Wrapper>
@@ -55,7 +57,9 @@ export const SceneView: React.FC = () => {
             )}
             <Canvas
                 camera={{
-                    position: [140, 26, -262],
+                    position: descriptor?.details.camera.deafultPosition ?? [
+                        140, 26, -262,
+                    ],
                     fov: 70,
                     near: 0.01,
                     far: 100000,
