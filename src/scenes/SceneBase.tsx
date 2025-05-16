@@ -112,15 +112,27 @@ export const SceneBase: React.FC<SceneBaseProps> = ({ sceneId, children }) => {
         <>
             {children}
             {isNight ? (
-                backgroundEnabled && (
+                <>
                     <mesh>
-                        <sphereGeometry args={[100000]} />
-                        <meshBasicMaterial
-                            map={skyTexture}
+                        <sphereGeometry args={[110000]} />
+                        <meshStandardMaterial
+                            emissive="#030011"
+                            emissiveIntensity={2.5}
                             side={DoubleSide}
                         />
                     </mesh>
-                )
+                    {backgroundEnabled && (
+                        <mesh>
+                            <sphereGeometry args={[100000]} />
+                            <meshBasicMaterial
+                                map={skyTexture}
+                                opacity={0.5}
+                                transparent
+                                side={DoubleSide}
+                            />
+                        </mesh>
+                    )}
+                </>
             ) : (
                 <>
                     <Sky
