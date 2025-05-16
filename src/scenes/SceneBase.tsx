@@ -108,7 +108,7 @@ export const SceneBase: React.FC<SceneBaseProps> = ({ sceneId, children }) => {
     });
 
     return (
-        <React.Fragment>
+        <>
             {children}
             {isNight ? (
                 backgroundEnabled && (
@@ -121,7 +121,7 @@ export const SceneBase: React.FC<SceneBaseProps> = ({ sceneId, children }) => {
                     </mesh>
                 )
             ) : (
-                <React.Fragment>
+                <>
                     <Sky
                         // @ts-expect-error - wrong typings (scale is not in props)
                         scale={10000}
@@ -136,9 +136,12 @@ export const SceneBase: React.FC<SceneBaseProps> = ({ sceneId, children }) => {
                         waterColor="#000000"
                         sunColor="#222222"
                     />
-                    <ambientLight intensity={0.4} />
-                    <pointLight position={[100, 100, 100]} />
-                </React.Fragment>
+                    <ambientLight intensity={0.84} />
+                    <pointLight
+                        position={[100, 100, 100]}
+                        intensity={200}
+                    />
+                </>
             )}
             {freeCameraEnabled && (
                 <OrbitControls
@@ -152,6 +155,6 @@ export const SceneBase: React.FC<SceneBaseProps> = ({ sceneId, children }) => {
                     onChange={handleCameraMovement}
                 />
             )}
-        </React.Fragment>
+        </>
     );
 };

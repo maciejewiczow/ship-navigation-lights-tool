@@ -11,47 +11,7 @@ import { WaterOptions } from 'three-stdlib';
 import defaultWaterNormalsPath from '~/assets/waternormals.jpg';
 import { Water3D as Water3DClass, Water3DOptions } from './Water3D';
 
-// export const useWaterShader = (objName: string) => {
-//     const { scene } = useThree();
-//     const timeRef = useRef<IUniform<number> | undefined>();
-
-//     const waterNormals = useLoader(TextureLoader, waterNormalsPath);
-
-//     waterNormals.wrapS = RepeatWrapping;
-//     waterNormals.wrapT = RepeatWrapping;
-
-//     const waterPlane = scene.getObjectByName(objName);
-
-//     console.log(waterPlane);
-
-//     useEffect(() => {
-//         if (waterPlane instanceof Mesh) {
-//             console.log('New water');
-//             const water = new Water((waterPlane.geometry as BufferGeometry).clone(), {
-//                 textureWidth: 512,
-//                 textureHeight: 512,
-//                 waterNormals,
-//                 alpha: 1.0,
-//                 sunDirection: new Vector3(),
-//                 sunColor: 0xffffff,
-//                 waterColor: 0x023e8d,
-//                 distortionScale: 3.7,
-//                 fog: false,
-//             });
-
-//             waterPlane.material = water.material;
-//             timeRef.current = (waterPlane.material as ShaderMaterial).uniforms.time;
-//             (waterPlane.material as Material).side = DoubleSide;
-//         }
-//     }, [waterNormals, waterPlane]);
-
-//     useFrame((_, delta) => {
-//         if (timeRef.current)
-//             timeRef.current.value += delta;
-//     });
-// };
-
-export const Water3D = extend(Water3DClass);
+const Water3D = extend(Water3DClass);
 
 interface WaterProps
     extends Partial<Overwrite<WaterOptions, { waterNormals: string }>> {
@@ -87,60 +47,67 @@ const defaultWaterConfig: Partial<Water3DOptions> = {
 
 const waterGeometry = new PlaneGeometry(1e4, 1e4, 1e3 / 4, 1e3 / 4);
 
-export const WaterReplacer: React.FC<WaterProps> = ({
-    placeholderName,
-    waterNormals: waterNormalsPath,
-    ...rest
-}) => {
-    const ref = useRef<Water3DClass>(null);
-    const scene = useThree(s => s.scene);
-    const waterNormals = useLoader(
-        TextureLoader,
-        waterNormalsPath ?? defaultWaterNormalsPath,
-    );
-    const placeholder = scene.getObjectByName(placeholderName);
+export const WaterReplacer: React.FC<WaterProps> = React.memo(
+    ({ placeholderName, waterNormals: waterNormalsPath, ...rest }) => {
+        const ref = useRef<Water3DClass>(null);
+        const scene = useThree(s => s.scene);
+        const waterNormals = useLoader(
+            TextureLoader,
+            waterNormalsPath ?? defaultWaterNormalsPath,
+        );
+        const placeholder = useMemo(
+            () => scene.getObjectByName(placeholderName),
+            [scene, placeholderName],
+        );
 
-    useLayoutEffect(() => {
-        if (placeholder) {
-            placeholder.visible = false;
-        }
-
-        if (ref.current && placeholder) {
-            ref.current.position.copy(placeholder.position);
-            ref.current.rotation.copy(placeholder.rotation);
-            ref.current.rotateX(-Math.PI / 2);
-            // ref.current.material.transparent = true;
-        }
-
-        return () => {
+        useLayoutEffect(() => {
             if (placeholder) {
-                placeholder.visible = true;
+                placeholder.visible = false;
             }
-        };
-    }, [placeholder]);
 
-    waterNormals.wrapS = RepeatWrapping;
-    waterNormals.wrapT = RepeatWrapping;
+            if (ref.current && placeholder) {
+                ref.current.position.copy(placeholder.position);
+                ref.current.rotation.copy(placeholder.rotation);
+                ref.current?.rotation.set(-Math.PI / 2, 0, 0);
+                // ref.current.material.transparent = true;
+            }
 
-    const config = useMemo(
-        () => ({
-            ...defaultWaterConfig,
-            ...rest,
-            waterNormals,
-        }),
-        [rest, waterNormals],
-    );
+            return () => {
+                if (placeholder) {
+                    placeholder.visible = true;
+                }
+            };
+        }, [placeholder]);
 
-    useFrame((_, delta) => {
-        if (ref.current?.material) {
-            ref.current.material.uniforms.time.value += delta;
-        }
-    });
+        useLayoutEffect(() => {
+            waterNormals.wrapS = RepeatWrapping;
+            waterNormals.wrapT = RepeatWrapping;
+        }, [waterNormals]);
 
-    return (
-        <Water3D
-            ref={ref}
-            args={[waterGeometry, config]}
-        />
-    );
-};
+        const config = useMemo<Water3DOptions>(
+            () => ({
+                ...defaultWaterConfig,
+                ...rest,
+                waterNormals,
+            }),
+            [rest, waterNormals],
+        );
+
+        useFrame((_, delta) => {
+            if (ref.current?.material) {
+                ref.current.material.uniforms.time.value += delta;
+            }
+        });
+
+        const args = useMemo(() => [waterGeometry, config] as const, [config]);
+
+        return (
+            <Water3D
+                ref={ref}
+                args={args}
+            />
+        );
+    },
+);
+
+WaterReplacer.displayName = 'WaterReplacer';

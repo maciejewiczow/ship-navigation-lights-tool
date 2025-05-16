@@ -1,4 +1,4 @@
-import { BufferGeometry, ShaderMaterial, Vector2 } from 'three';
+import { BufferGeometry, Vector2 } from 'three';
 import { Water, WaterOptions } from 'three-stdlib';
 
 interface Wave {
@@ -15,21 +15,15 @@ export class Water3D extends Water {
     constructor(geometry: BufferGeometry, options: Water3DOptions) {
         super(geometry, options);
 
-        if (this.material instanceof ShaderMaterial) {
-            this.material.onBeforeCompile = shader => {
-                if (!(this.material instanceof ShaderMaterial)) {
-                    return;
-                }
+        this.material.onBeforeCompile = shader => {
+            this.material.defines.HAS_WAVES = (options.waves?.length ?? 0) > 0;
+            this.material.defines.WAVE_COUNT = options.waves?.length;
 
-                this.material.defines.HAS_WAVES =
-                    (options.waves?.length ?? 0) > 0;
-                this.material.defines.WAVE_COUNT = options.waves?.length;
+            shader.uniforms.waves = {
+                value: options.waves,
+            };
 
-                shader.uniforms.waves = {
-                    value: options.waves,
-                };
-
-                shader.vertexShader = /* glsl */ `
+            shader.vertexShader = /* glsl */ `
                 uniform mat4 textureMatrix;
                 uniform float time;
 
@@ -150,10 +144,9 @@ export class Water3D extends Water {
                     #include <shadowmap_vertex>
                 }
             `;
-            };
+        };
 
-            this.material.customProgramCacheKey = () =>
-                (options.waves?.length ?? 0).toString();
-        }
+        this.material.customProgramCacheKey = () =>
+            (options.waves?.length ?? 0).toString();
     }
 }

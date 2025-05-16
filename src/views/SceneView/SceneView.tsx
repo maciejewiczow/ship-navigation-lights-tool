@@ -56,11 +56,11 @@ export const SceneView: React.FC = () => {
             <Canvas
                 camera={{
                     position: [140, 26, -262],
-                    aspect: 70,
-                    near: 10,
-                    far: 1000000,
+                    fov: 70,
+                    near: 0.01,
+                    far: 100000,
                 }}
-                // gl={{ logarithmicDepthBuffer: true }}
+                gl={{ logarithmicDepthBuffer: true }}
             >
                 <Suspense fallback={<SceneLoader />}>
                     <SceneBase sceneId={id}>

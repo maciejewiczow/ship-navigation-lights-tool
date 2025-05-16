@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useLoader, useThree } from '@react-three/fiber';
 import { DoubleSide, Mesh, MeshBasicMaterial } from 'three';
 import { GLTFLoader } from 'three-stdlib';
@@ -17,9 +17,12 @@ export const GeneralScene: React.FC<GeneralSceneProps> = ({
     const camera = useThree(x => x.camera);
     const gltf = useLoader(GLTFLoader, sceneFilePath);
 
-    const target =
-        gltf.scene.getObjectByName(shipObjectName)?.position ??
-        gltf.scene.position;
+    const target = useMemo(
+        () =>
+            gltf.scene.getObjectByName(shipObjectName)?.position ??
+            gltf.scene.position,
+        [gltf.scene, shipObjectName],
+    );
 
     useEffect(() => {
         const water = gltf.scene.getObjectByName(waterObjectName);
@@ -29,7 +32,7 @@ export const GeneralScene: React.FC<GeneralSceneProps> = ({
         }
 
         camera.lookAt(target);
-    }, [camera, target, gltf, shipObjectName, waterObjectName]);
+    }, [camera, target, gltf, waterObjectName]);
 
     return (
         <primitive
