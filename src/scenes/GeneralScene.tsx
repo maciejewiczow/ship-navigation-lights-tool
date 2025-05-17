@@ -1,7 +1,8 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import { useLoader, useThree } from '@react-three/fiber';
 import { DoubleSide, Mesh, MeshBasicMaterial } from 'three';
 import { GLTFLoader } from 'three-stdlib';
+import { useAngleLimitedLights } from './ThreeHooks/useAngleLimitedLights';
 
 export interface GeneralSceneProps {
     sceneFilePath: string;
@@ -14,15 +15,8 @@ export const GeneralScene: React.FC<GeneralSceneProps> = ({
     shipObjectName = 'Statek',
     waterObjectName = 'Woda',
 }) => {
-    const camera = useThree(x => x.camera);
+    const camera = useThree(s => s.camera);
     const gltf = useLoader(GLTFLoader, sceneFilePath);
-
-    const target = useMemo(
-        () =>
-            gltf.scene.getObjectByName(shipObjectName)?.position ??
-            gltf.scene.position,
-        [gltf.scene, shipObjectName],
-    );
 
     useEffect(() => {
         const water = gltf.scene.getObjectByName(waterObjectName);
@@ -31,8 +25,14 @@ export const GeneralScene: React.FC<GeneralSceneProps> = ({
             (water.material as MeshBasicMaterial).side = DoubleSide;
         }
 
+        const target =
+            gltf.scene.getObjectByName(shipObjectName)?.position ??
+            gltf.scene.position;
+
         camera.lookAt(target);
-    }, [camera, target, gltf, waterObjectName]);
+    }, [camera, gltf, shipObjectName, waterObjectName]);
+
+    useAngleLimitedLights(gltf.scene);
 
     return (
         <primitive

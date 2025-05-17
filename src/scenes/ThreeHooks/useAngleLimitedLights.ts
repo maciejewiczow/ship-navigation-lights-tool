@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useFrame, useThree } from '@react-three/fiber';
+import { useFrame } from '@react-three/fiber';
 import {
     BufferGeometry,
     Mesh,
@@ -9,20 +9,25 @@ import {
 } from 'three';
 import { degToRad } from 'three/src/math/MathUtils.js';
 import { directedAngle } from '~/scenes/directedAngle';
-import { SceneDetails } from './sceneDetails';
+import { useCurrentScene } from '~/utils/hooks/useCurrentScene';
 
-export const useAngleLimitedLights = (
-    angleLimitedLights: SceneDetails['angleLimitedLights'],
-    model: Object3D | undefined,
-) => {
-    const scene = useThree(s => s.scene);
+export const useAngleLimitedLights = (model: Object3D | undefined) => {
+    const sceneDescriptor = useCurrentScene();
 
     const lights = useMemo(() => {
+        if (!sceneDescriptor || !model) {
+            return [];
+        }
+
+        const {
+            details: { angleLimitedLights },
+        } = sceneDescriptor;
+
         const res: Mesh<BufferGeometry, MeshStandardMaterial>[] = [];
 
         const lightNames = Object.keys(angleLimitedLights);
 
-        scene.traverse(obj => {
+        model.traverse(obj => {
             const name = lightNames.find(lightName =>
                 obj.name.toLowerCase().startsWith(lightName.toLowerCase()),
             );
@@ -39,7 +44,7 @@ export const useAngleLimitedLights = (
         for (const light of res) {
             const limits = angleLimitedLights[light.name];
             const name = limits.angleRelativeTo;
-            const obj = scene.getObjectByName(name);
+            const obj = model.getObjectByName(name);
 
             if (!obj) {
                 console.warn(
@@ -51,10 +56,17 @@ export const useAngleLimitedLights = (
         }
 
         return res;
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [angleLimitedLights, scene, model]);
+    }, [sceneDescriptor, model]);
 
     useFrame(({ camera }) => {
+        if (!sceneDescriptor) {
+            return;
+        }
+
+        const {
+            details: { angleLimitedLights },
+        } = sceneDescriptor;
+
         const cameraPos = camera.getWorldPosition(new Vector3());
 
         for (const light of lights) {
