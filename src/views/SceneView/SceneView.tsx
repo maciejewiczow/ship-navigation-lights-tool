@@ -1,41 +1,38 @@
 import React, { Suspense, useEffect, useState } from 'react';
 import { AiOutlineControl } from 'react-icons/ai';
 import { useDispatch } from 'react-redux';
-import { Navigate, useParams } from 'react-router';
+import { Navigate } from 'react-router';
 import { lightSetParamName, noControlsParamName } from '~/appConstants';
 import { Canvas } from '~/components/Canvas';
-import { sceneMap } from '~/scenes';
 import { SceneBase } from '~/scenes/SceneBase';
 import { loadScene } from '~/store/Scenes/actions';
 import { useQueryParams } from '~/utils/hooks';
+import { useCurrentScene } from '~/utils/hooks/useCurrentScene';
 import { Controls, ControlsDrawer, DrawerHandle, Wrapper } from './parts';
 import { SceneLoader } from './SceneLoader';
 
-type SceneViewRouteParams = {
+export type SceneViewRouteParams = {
     id?: string;
 };
 
 export const SceneView: React.FC = () => {
-    const { id } = useParams<SceneViewRouteParams>();
     const [areControlsOpen, setAreControlsOpen] = useState(false);
     const dispatch = useDispatch();
     const queryParams = useQueryParams();
+    const descriptor = useCurrentScene();
 
     useEffect(() => {
-        if (id && sceneMap.has(id) && queryParams.has(lightSetParamName)) {
+        if (descriptor && queryParams.has(lightSetParamName)) {
             // Checked if it is not null just above
-            dispatch(loadScene(sceneMap.get(id)!));
+            dispatch(loadScene(descriptor));
         }
-
         // this effect should not trigger if scenes are modified
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dispatch, id]);
+    }, [dispatch, descriptor]);
 
-    if (!id || !sceneMap.has(id)) {
+    if (!descriptor) {
         return <Navigate to="/" />;
     }
-
-    const descriptor = sceneMap.get(id);
 
     const Model = descriptor?.component ?? React.Fragment;
 
@@ -46,7 +43,7 @@ export const SceneView: React.FC = () => {
                     open={areControlsOpen}
                     handleHeight={40}
                 >
-                    <Controls sceneId={id} />
+                    <Controls />
                     <DrawerHandle
                         onClick={() => setAreControlsOpen(state => !state)}
                         title="Ustawienia sceny"
@@ -67,7 +64,7 @@ export const SceneView: React.FC = () => {
                 gl={{ logarithmicDepthBuffer: true }}
             >
                 <Suspense fallback={<SceneLoader />}>
-                    <SceneBase sceneId={id}>
+                    <SceneBase>
                         <Model />
                     </SceneBase>
                 </Suspense>

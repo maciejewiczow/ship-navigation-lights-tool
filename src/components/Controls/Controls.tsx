@@ -10,11 +10,7 @@ import { currentSceneParams } from '~/store/Scenes/selectors';
 import { ClassNameProps } from '~/utils/classNameProps';
 import { DayButton, FormContentWrapper, NightButton } from './parts';
 
-interface ControlsProps extends ClassNameProps {
-    sceneId: string;
-}
-
-export const Controls: React.FC<ControlsProps> = ({ className }) => {
+export const Controls: React.FC<ClassNameProps> = ({ className }) => {
     const dispatch = useDispatch();
     const params = useSelector(currentSceneParams);
 

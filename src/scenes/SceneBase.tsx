@@ -11,18 +11,13 @@ import { debounce } from 'lodash';
 import { DoubleSide, Vector3 } from 'three';
 import starsEnvFile from '~/assets/starmap.png';
 import { WaterReplacer } from '~/components/WaterReplacer';
-import { sceneMap } from '~/scenes';
 import { updateSceneParams } from '~/store/Scenes/actions';
 import { currentSceneParams } from '~/store/Scenes/selectors';
+import { useCurrentScene } from '~/utils/hooks/useCurrentScene';
 import { directedAngle } from './directedAngle';
 import { defaultDetails } from './ThreeHooks/sceneDetails';
-import { useAngleLimitedLights } from './ThreeHooks/useAngleLimitedLights';
 
-interface SceneBaseProps extends PropsWithChildren {
-    sceneId: string;
-}
-
-export const SceneBase: React.FC<SceneBaseProps> = ({ sceneId, children }) => {
+export const SceneBase: React.FC<PropsWithChildren> = ({ children }) => {
     const { scene, camera } = useThree();
     const dispatch = useDispatch();
     const {
@@ -36,12 +31,10 @@ export const SceneBase: React.FC<SceneBaseProps> = ({ sceneId, children }) => {
 
     const skyTexture = useTexture(starsEnvFile);
 
-    const sceneDetails = sceneMap.get(sceneId)?.details ?? defaultDetails;
+    const sceneDetails = useCurrentScene()?.details ?? defaultDetails;
 
     const model = scene.getObjectByName(sceneDetails.boatObjectName);
     const target = useMemo(() => new Vector3(0, 0, 0), []);
-
-    useAngleLimitedLights(sceneDetails.angleLimitedLights, model);
 
     useLayoutEffect(() => {
         if (!freeCameraEnabled) {
@@ -77,7 +70,6 @@ export const SceneBase: React.FC<SceneBaseProps> = ({ sceneId, children }) => {
         camera,
         cameraHeight,
         target,
-        sceneId,
         dispatch,
         distance,
     ]);

@@ -15,7 +15,7 @@ export const ControlsView: React.FC = () => {
     return (
         <Wrapper>
             <h3>{desc.name}</h3>
-            <Controls sceneId={desc.id} />
+            <Controls />
         </Wrapper>
     );
 };
