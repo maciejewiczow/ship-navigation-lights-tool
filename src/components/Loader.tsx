@@ -21,8 +21,6 @@ const AnimationWrapper = styled.div`
 
     width: 100px;
     height: 100px;
-
-    /* width: 100%; */
 `;
 
 const Box = styled.div<{ delay: string }>`

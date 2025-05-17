@@ -1,6 +1,7 @@
-import { SceneDetails } from '~/scenes/ThreeHooks/sceneDetails';
+import { defaultDetails, SceneDetails } from '~/scenes/ThreeHooks/sceneDetails';
 
 export const sceneDetails: SceneDetails = {
+    ...defaultDetails,
     angleLimitedLights: {
         Burtowe_lewe: {
             angleRelativeTo: 'Statek',

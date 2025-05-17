@@ -1,6 +1,7 @@
-import { SceneDetails } from '~/scenes/ThreeHooks/sceneDetails';
+import { defaultDetails, SceneDetails } from '~/scenes/ThreeHooks/sceneDetails';
 
 export const sceneDetails: SceneDetails = {
+    ...defaultDetails,
     angleLimitedLights: {
         Burtowe_lewe: {
             angleRelativeTo: 'Statek',
@@ -13,6 +14,11 @@ export const sceneDetails: SceneDetails = {
             maxVisibilityAngleDeg: 5,
         },
         Masztowe_rufa: {
+            angleRelativeTo: 'Statek',
+            minVisibilityAngleDeg: -112.5,
+            maxVisibilityAngleDeg: 112.5,
+        },
+        Masztowe_dziob: {
             angleRelativeTo: 'Statek',
             minVisibilityAngleDeg: -112.5,
             maxVisibilityAngleDeg: 112.5,

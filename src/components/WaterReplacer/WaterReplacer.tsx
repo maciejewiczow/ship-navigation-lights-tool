@@ -68,8 +68,7 @@ export const WaterReplacer: React.FC<WaterProps> = React.memo(
             if (ref.current && placeholder) {
                 ref.current.position.copy(placeholder.position);
                 ref.current.rotation.copy(placeholder.rotation);
-                ref.current?.rotation.set(-Math.PI / 2, 0, 0);
-                // ref.current.material.transparent = true;
+                ref.current.rotation.set(-Math.PI / 2, 0, 0);
             }
 
             return () => {

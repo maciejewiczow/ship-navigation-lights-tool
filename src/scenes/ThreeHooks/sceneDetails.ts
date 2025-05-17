@@ -8,6 +8,8 @@ export interface SceneDetails {
     angleLimitedLights: Record<string, AngleLimitedLight>;
     boatObjectName: string;
     waterObjectName: string;
+    nightSetObjectName: string;
+    daySetObjectName: string;
     camera: {
         deafultPosition?: [number, number, number];
         distanceLimits: {
@@ -21,6 +23,8 @@ export const defaultDetails: SceneDetails = {
     angleLimitedLights: {},
     boatObjectName: 'Statek',
     waterObjectName: 'Woda',
+    daySetObjectName: 'Dzien',
+    nightSetObjectName: 'Noc',
     camera: {
         deafultPosition: [140, 26, -262],
         distanceLimits: {

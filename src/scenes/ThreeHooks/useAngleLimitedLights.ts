@@ -31,18 +31,15 @@ export const useAngleLimitedLights = (model: Object3D | undefined) => {
             const name = lightNames.find(lightName =>
                 obj.name.toLowerCase().startsWith(lightName.toLowerCase()),
             );
-            if (
-                obj instanceof Mesh &&
-                obj.material instanceof MeshStandardMaterial &&
-                name
-            ) {
-                obj.name = name;
+
+            if (obj instanceof Mesh && name) {
+                obj.userData.descriptorName = name;
                 res.push(obj);
             }
         });
 
         for (const light of res) {
-            const limits = angleLimitedLights[light.name];
+            const limits = angleLimitedLights[light.userData.descriptorName];
             const name = limits.angleRelativeTo;
             const obj = model.getObjectByName(name);
 
@@ -73,7 +70,7 @@ export const useAngleLimitedLights = (model: Object3D | undefined) => {
             const relativeTo = light.userData.angleRelativeTo as
                 | Object3D
                 | undefined;
-            const limits = angleLimitedLights[light.name];
+            const limits = angleLimitedLights[light.userData.descriptorName];
 
             const pos =
                 relativeTo?.getWorldPosition(new Vector3()).setY(0) ??

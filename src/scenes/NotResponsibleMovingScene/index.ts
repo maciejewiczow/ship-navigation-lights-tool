@@ -4,7 +4,7 @@ import { NotResponsibleMovingScene } from './NotResponsibleMovingScene';
 import { sceneDetails } from './scene';
 
 export const descriptor: SceneDescriptor = {
-    name: 'Statek nie odpowiadający za swoje ruchy gdy, posuwa się po wodzie',
+    name: 'Statek o długości powyżej 50m nie odpowiadający za swoje ruchy gdy, posuwa się po wodzie',
     id: 'not-responsible-moving',
     iconPath,
     component: NotResponsibleMovingScene,

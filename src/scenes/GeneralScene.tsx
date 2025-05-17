@@ -3,6 +3,7 @@ import { useLoader, useThree } from '@react-three/fiber';
 import { DoubleSide, Mesh, MeshBasicMaterial } from 'three';
 import { GLTFLoader } from 'three-stdlib';
 import { useAngleLimitedLights } from './ThreeHooks/useAngleLimitedLights';
+import { useDayNightObjects } from './ThreeHooks/useDayNightObjects';
 
 export interface GeneralSceneProps {
     sceneFilePath: string;
@@ -33,6 +34,7 @@ export const GeneralScene: React.FC<GeneralSceneProps> = ({
     }, [camera, gltf, shipObjectName, waterObjectName]);
 
     useAngleLimitedLights(gltf.scene);
+    useDayNightObjects(gltf.scene);
 
     return (
         <primitive

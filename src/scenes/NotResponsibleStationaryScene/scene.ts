@@ -1,6 +1,7 @@
-import { SceneDetails } from '../ThreeHooks/sceneDetails';
+import { defaultDetails, SceneDetails } from '../ThreeHooks/sceneDetails';
 
 export const sceneDetails: SceneDetails = {
+    ...defaultDetails,
     angleLimitedLights: {},
     boatObjectName: 'Statek',
     waterObjectName: 'Woda',

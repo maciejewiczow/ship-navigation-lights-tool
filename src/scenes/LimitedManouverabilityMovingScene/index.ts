@@ -4,7 +4,7 @@ import { LimitedManouverabilityMovingScene } from './LimitedManouverabilityMovin
 import { sceneDetails } from './scene';
 
 export const descriptor: SceneDescriptor = {
-    name: 'Statek o ograniczonej zdolności manewrowej, gdy posuwa się po wodzie',
+    name: 'Statek o długości powyżej 50 i ograniczonej zdolności manewrowej, gdy posuwa się po wodzie',
     id: 'limited-manouverability-moving',
     iconPath,
     component: LimitedManouverabilityMovingScene,
