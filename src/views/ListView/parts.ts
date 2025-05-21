@@ -1,6 +1,6 @@
 import OriginalCard from 'react-bootstrap/esm/Card';
 import styled from 'styled-components';
-import ReactComponent from '~/assets/undraw_No_data_re_kwbl.svg';
+import ReactComponent from '~/assets/undraw_No_data_re_kwbl.svg?react';
 import { InvisibleLink } from '~/components/InvisibleLink';
 
 export const Wrapper = styled.div`
