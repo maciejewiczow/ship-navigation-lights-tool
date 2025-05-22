@@ -2,7 +2,7 @@ import React, { Suspense, useEffect, useState } from 'react';
 import { AiOutlineControl } from 'react-icons/ai';
 import { useDispatch } from 'react-redux';
 import { Navigate } from 'react-router';
-import { lightSetParamName, noControlsParamName } from '~/appConstants';
+import { noControlsParamName } from '~/appConstants';
 import { Canvas } from '~/components/Canvas';
 import { SceneBase } from '~/scenes/SceneBase';
 import { loadScene } from '~/store/Scenes/actions';
@@ -22,12 +22,9 @@ export const SceneView: React.FC = () => {
     const descriptor = useCurrentScene();
 
     useEffect(() => {
-        if (descriptor && queryParams.has(lightSetParamName)) {
-            // Checked if it is not null just above
+        if (descriptor) {
             dispatch(loadScene(descriptor));
         }
-        // this effect should not trigger if scenes are modified
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch, descriptor]);
 
     if (!descriptor) {

@@ -54,5 +54,4 @@ export const Controls = styled(OriginalControls)`
 
 export const Html = styled(OriginalHtml)`
     background: black;
-    /* padding: 12px; */
 `;
