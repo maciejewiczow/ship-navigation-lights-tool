@@ -1,4 +1,7 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+import { Button } from 'react-bootstrap';
 import OriginalCard from 'react-bootstrap/esm/Card';
+import { BiLinkExternal } from 'react-icons/bi';
 import styled from 'styled-components';
 import ReactComponent from '~/assets/undraw_No_data_re_kwbl.svg?react';
 import { InvisibleLink } from '~/components/InvisibleLink';
@@ -26,11 +29,11 @@ export const CardsWrapper = styled.div`
     display: flex;
     flex-flow: row wrap;
     justify-content: center;
+    align-items: stretch;
+    gap: 16px;
 
     > * {
         width: 300px;
-        margin-right: 16px;
-        margin-bottom: 16px;
     }
 `;
 
@@ -51,54 +54,46 @@ export const NoResultsIcon = styled(ReactComponent)`
     margin-right: 14px;
 `;
 
-// @ts-expect-error same issue with bootstrap + drei
-export const HorizontalCardBody = styled(OriginalCard.Body)`
+// @ts-ignore same issue with bootstrap + drei
+export const CardBody = styled(OriginalCard.Body)`
+    min-height: 130px;
+    display: flex;
+    flex-direction: column;
+`;
+
+// @ts-ignore same issue with bootstrap + drei
+export const Card = styled(OriginalCard)`
+    transition: box-shadow 0.3s ease-in-out;
+
+    &:hover {
+        box-shadow: 0 0 20px -1px rgba(0, 0, 0, 0.3);
+    }
+`;
+
+export const CardImg = styled(OriginalCard.Img)`
+    object-fit: contain;
+    background: black;
+    height: 200px;
+`;
+
+// @ts-ignore same issue with bootstrap + drei
+export const NewWindowButton = styled(Button).attrs({
+    variant: 'outline-secondary',
+})`
     display: flex;
     flex-flow: row nowrap;
-    min-height: 130px;
-
-    .card-text {
-        margin-bottom: 0;
-    }
-`;
-
-export const WholeCardLink = styled(InvisibleLink)`
-    position: absolute;
-    z-index: 1;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-`;
-
-export const CardStyleWrapper = styled.div`
-    .card {
-        position: relative;
-        height: 100%;
-        max-height: 400px;
-
-        &:hover {
-            color: #0a58ca;
-        }
-
-        a:not(${WholeCardLink}) {
-            z-index: 3;
-        }
-
-        img {
-            object-fit: contain;
-            background: black;
-            height: 100%;
-        }
-    }
-`;
-
-export const InnerLink = styled.a`
-    font-size: 24px;
-    color: initial;
-    margin-left: 8px;
-
-    display: flex;
+    gap: 8px;
     align-items: center;
-    cursor: pointer;
+`;
+
+export const NewWindowIcon = styled(BiLinkExternal)`
+    font-size: 32px;
+`;
+
+export const CardText = styled(OriginalCard.Text)`
+    flex: 1;
+`;
+
+export const ButtonLink = styled(InvisibleLink)`
+    color: var(--bs-btn-color);
 `;

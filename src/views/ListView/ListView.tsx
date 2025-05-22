@@ -1,21 +1,23 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import Card from 'react-bootstrap/Card';
-import { BiLinkExternal } from 'react-icons/bi';
+import { Button, ButtonGroup } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
-import { push } from 'redux-first-history';
+import { push, replace } from 'redux-first-history';
 import { sceneMap } from '~/scenes';
 import { loadScene } from '~/store/Scenes/actions';
 import { withDefault } from '~/utils/withDefault';
 import {
-    CardStyleWrapper,
+    ButtonLink,
+    Card,
+    CardBody,
+    CardImg,
     CardsWrapper,
+    CardText,
     Header,
-    HorizontalCardBody,
-    InnerLink,
+    NewWindowButton,
+    NewWindowIcon,
     NoResultsIcon,
     NoResultsWrapper,
     SearchInput,
-    WholeCardLink,
     Wrapper,
 } from './parts';
 
@@ -46,11 +48,17 @@ export const ListView: React.FC = () => {
         }
 
         dispatch(loadScene(sceneMap.get(id)!));
-        window.open(
+        const popup = window.open(
             `/scene/${id}?noControls`,
             'scene',
             `height=${screen.availHeight},width=${screen.availWidth},fullscreen=yes,toolbar=no,menubar=no,scrollbars=no,resizable=yes,location=no,directories=no,status=no`,
         );
+
+        popup?.addEventListener('load', () => {
+            popup.addEventListener('unload', () => {
+                dispatch(replace('/'));
+            });
+        });
 
         dispatch(push('/controls'));
     };
@@ -74,26 +82,40 @@ export const ListView: React.FC = () => {
                                 .toLowerCase()
                                 .includes(searchText.trim().toLowerCase()),
                         )
-                        .map(({ name, id, iconPath }) => (
-                            <CardStyleWrapper key={id}>
-                                <Card>
-                                    <WholeCardLink to={`/scene/${id}`} />
-                                    <Card.Img
+                        .map(({ name, id, iconPath }) => {
+                            return (
+                                <Card key={id}>
+                                    <CardImg
                                         variant="top"
                                         src={iconPath}
                                     />
-                                    <HorizontalCardBody>
-                                        <Card.Text>{name}</Card.Text>
-                                        <InnerLink
-                                            title="Otwórz w nowym oknie"
-                                            onClick={openSceneInNewWindow(id)}
-                                        >
-                                            <BiLinkExternal />
-                                        </InnerLink>
-                                    </HorizontalCardBody>
+                                    <CardBody>
+                                        <CardText>{name}</CardText>
+                                        <ButtonGroup>
+                                            {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                                            {/* @ts-ignore another bogus error */}
+                                            <Button
+                                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                                // @ts-ignore
+                                                as={ButtonLink}
+                                                to={`/scene/${id}`}
+                                                variant="outline-primary"
+                                            >
+                                                Otwórz w tym oknie
+                                            </Button>
+                                            <NewWindowButton
+                                                onClick={openSceneInNewWindow(
+                                                    id,
+                                                )}
+                                            >
+                                                Otwórz w nowym oknie
+                                                <NewWindowIcon />
+                                            </NewWindowButton>
+                                        </ButtonGroup>
+                                    </CardBody>
                                 </Card>
-                            </CardStyleWrapper>
-                        )),
+                            );
+                        }),
                     <NoResultsWrapper>
                         <NoResultsIcon />
                         <h2>Pusto</h2>
