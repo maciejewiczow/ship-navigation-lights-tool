@@ -34,7 +34,7 @@ export const sceneDetails: SceneDetails = {
     camera: {
         deafultPosition: [140, 26, -262],
         distanceLimits: {
-            min: 80,
+            min: 90,
             max: 1000,
         },
     },
