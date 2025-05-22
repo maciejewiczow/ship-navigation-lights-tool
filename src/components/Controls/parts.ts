@@ -1,13 +1,14 @@
+import { InputGroup } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import styled from 'styled-components';
+import { ValidatedControl } from './ValidatedControl';
 
 // @ts-expect-error issue with react-bootstrap+drei
 export const ButtonBase = styled(Button)`
     font-size: 24px;
-    padding: 2px 8px;
 
     svg {
-        margin-bottom: 2px;
+        margin-bottom: 5px;
     }
 `;
 
@@ -34,6 +35,27 @@ export const NightButton = styled(ButtonBase)`
 
 export const FormContentWrapper = styled.div`
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-row-gap: 8px;
+    grid-template-columns: repeat(2, auto);
+    column-gap: 16px;
+    row-gap: 12px;
+
+    > *:nth-child(2n) {
+        text-align: center;
+    }
+
+    > *:nth-child(2n + 1) {
+        display: flex;
+        align-items: center;
+    }
+`;
+
+export const NaturalWidthControl = styled(ValidatedControl)`
+    flex: unset !important;
+    width: 100px !important;
+`;
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore problem with boostrap + drei
+export const InputGroupText = styled(InputGroup.Text)`
+    font-family: monospace;
 `;

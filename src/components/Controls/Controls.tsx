@@ -1,4 +1,5 @@
 import React from 'react';
+import { InputGroup } from 'react-bootstrap';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Form from 'react-bootstrap/Form';
 import { IoIosCloudyNight, IoIosSunny } from 'react-icons/io';
@@ -6,13 +7,24 @@ import { useDispatch, useSelector } from 'react-redux';
 import { degToRad, radToDeg } from 'three/src/math/MathUtils.js';
 import { Checkbox } from '~/components/Checkbox';
 import { updateSceneParams } from '~/store/Scenes/actions';
-import { currentSceneParams } from '~/store/Scenes/selectors';
+import {
+    currentSceneDescriptor,
+    currentSceneParams,
+} from '~/store/Scenes/selectors';
 import { ClassNameProps } from '~/utils/classNameProps';
-import { DayButton, FormContentWrapper, NightButton } from './parts';
+import { roundWithPrecision } from '~/utils/roundWithPrecision';
+import {
+    DayButton,
+    FormContentWrapper,
+    InputGroupText,
+    NaturalWidthControl,
+    NightButton,
+} from './parts';
 
 export const Controls: React.FC<ClassNameProps> = ({ className }) => {
     const dispatch = useDispatch();
     const params = useSelector(currentSceneParams);
+    const currentScene = useSelector(currentSceneDescriptor);
 
     if (!params) {
         return null;
@@ -67,7 +79,7 @@ export const Controls: React.FC<ClassNameProps> = ({ className }) => {
                     }
                     checked={params.backgroundEnabled}
                 />
-                <Form.Label>Swobodna kamera</Form.Label>
+                <Form.Label>Kamera poruszana myszką</Form.Label>
                 <Checkbox
                     onClick={() =>
                         dispatch(
@@ -79,7 +91,7 @@ export const Controls: React.FC<ClassNameProps> = ({ className }) => {
                     checked={params.freeCameraEnabled}
                 />
                 <Form.Label>Kąt do patrzącego</Form.Label>
-                <div>
+                <InputGroup>
                     <Form.Control
                         type="range"
                         min="0"
@@ -95,33 +107,41 @@ export const Controls: React.FC<ClassNameProps> = ({ className }) => {
                         }
                         disabled={params.freeCameraEnabled}
                     />
-                    &nbsp;{Math.round(radToDeg(params.angle)) - 180}&#176;
-                </div>
-                <Form.Label>Wysokość kamery</Form.Label>
-                <div>
-                    <Form.Control
-                        type="range"
+                    <NaturalWidthControl
+                        type="number"
                         min="0"
-                        max="60"
+                        max="360"
                         step="0.1"
-                        value={params.cameraHeight}
-                        onChange={e =>
+                        value={(
+                            roundWithPrecision(radToDeg(params.angle), 0.1) -
+                            180
+                        ).toFixed(1)}
+                        validate={val =>
+                            val !== undefined ? +val < 180 && +val > -180 : true
+                        }
+                        onChange={e => {
                             dispatch(
                                 updateSceneParams({
-                                    cameraHeight: +e.target.value,
+                                    angle: degToRad(+e.target.value + 180),
                                 }),
-                            )
-                        }
+                            );
+                        }}
                         disabled={params.freeCameraEnabled}
                     />
-                    &nbsp;{Math.round(params.cameraHeight)}m
-                </div>
+                    <InputGroupText>&#176;</InputGroupText>
+                </InputGroup>
                 <Form.Label>Odległość</Form.Label>
-                <div>
+                <InputGroup>
                     <Form.Control
                         type="range"
-                        min="65"
-                        max="600"
+                        min={
+                            currentScene?.details.camera.distanceLimits.min ??
+                            65
+                        }
+                        max={
+                            currentScene?.details.camera.distanceLimits.max ??
+                            1000
+                        }
                         step="1"
                         value={params.distance}
                         onChange={e =>
@@ -133,8 +153,41 @@ export const Controls: React.FC<ClassNameProps> = ({ className }) => {
                         }
                         disabled={params.freeCameraEnabled}
                     />
-                    &nbsp;{Math.round(params.distance)}m
-                </div>
+                    <NaturalWidthControl
+                        type="number"
+                        min={
+                            currentScene?.details.camera.distanceLimits.min ??
+                            65
+                        }
+                        max={
+                            currentScene?.details.camera.distanceLimits.max ??
+                            1000
+                        }
+                        step="1"
+                        value={Math.round(params.distance)}
+                        validate={val =>
+                            val !== undefined
+                                ? +val >
+                                      (currentScene?.details.camera
+                                          .distanceLimits.min ?? 65) &&
+                                  +val <
+                                      (currentScene?.details.camera
+                                          .distanceLimits.max ?? 1000)
+                                : true
+                        }
+                        onChange={e => {
+                            const val = +e.target.value;
+
+                            dispatch(
+                                updateSceneParams({
+                                    distance: val,
+                                }),
+                            );
+                        }}
+                        disabled={params.freeCameraEnabled}
+                    />
+                    <InputGroupText>m</InputGroupText>
+                </InputGroup>
             </FormContentWrapper>
         </Form>
     );
