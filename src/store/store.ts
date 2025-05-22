@@ -15,7 +15,7 @@ const composeEnhancers =
 
 const config: Config = {
     // predicate: action => !(action.type as string).startsWith('@@router'),
-    whitelist: [SceneActionType.updateParams],
+    whitelist: [SceneActionType.updateParams, SceneActionType.loadScene],
     prepareState: ({ router, ...state }) => state,
 };
 
