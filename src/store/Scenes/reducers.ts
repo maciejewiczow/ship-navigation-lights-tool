@@ -11,7 +11,7 @@ export const scenesReducer: Reducer<SceneState, SceneAction> = (
         case SceneActionType.loadScene:
             return {
                 ...initialScenesState,
-                sceneDesc: {
+                sceneDescriptor: {
                     ...action.scene,
                 },
             };

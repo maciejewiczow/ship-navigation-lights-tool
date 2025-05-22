@@ -20,55 +20,49 @@ import { defaultDetails } from './ThreeHooks/sceneDetails';
 export const SceneBase: React.FC<PropsWithChildren> = ({ children }) => {
     const { scene, camera } = useThree();
     const dispatch = useDispatch();
-    const {
-        isNight,
-        backgroundEnabled,
-        freeCameraEnabled,
-        cameraHeight,
-        angle,
-        distance,
-    } = useSelector(currentSceneParams);
+    const { isNight, backgroundEnabled, freeCameraEnabled, angle, distance } =
+        useSelector(currentSceneParams);
+    const currentScene = useCurrentScene();
 
     const skyTexture = useTexture(starsEnvFile);
 
     const sceneDetails = useCurrentScene()?.details ?? defaultDetails;
 
     const model = scene.getObjectByName(sceneDetails.boatObjectName);
-    const target = useMemo(() => new Vector3(0, 0, 0), []);
+    const target = useMemo(
+        () => model?.position ?? new Vector3(0, 0, 0),
+        [model],
+    );
 
     useLayoutEffect(() => {
-        if (!freeCameraEnabled) {
-            if (cameraHeight > 60) {
-                dispatch(
-                    updateSceneParams({
-                        cameraHeight: 60,
-                    }),
-                );
-            }
-
-            const dir =
-                model?.getWorldDirection(new Vector3()) ?? new Vector3(0, 0, 1);
-
-            const len = camera.position.length();
-            const pos = dir
-                .applyAxisAngle(new Vector3(0, 1, 0), angle - Math.PI / 2)
-                // .applyAxisAngle(camera.position.clone().cross(camera.up), Math.asin(cameraHeight / len));
-                .multiplyScalar(len);
-
-            camera.position.copy(pos);
-
-            camera.position.y = cameraHeight;
-            camera.position.multiplyScalar(len / camera.position.length());
-            camera.position.multiplyScalar(distance / camera.position.length());
-
-            camera.lookAt(target);
+        if (freeCameraEnabled) {
+            return;
         }
+
+        const dir =
+            model?.getWorldDirection(new Vector3()) ?? new Vector3(0, 0, 1);
+
+        const len = camera.position.length();
+        const pos = dir
+            .applyAxisAngle(new Vector3(0, 1, 0), angle - Math.PI / 2)
+            .multiplyScalar(len);
+
+        camera.position.copy(pos);
+
+        camera.position.setY(
+            currentScene?.details.camera.deafultPosition?.[1] ?? 0,
+        );
+
+        camera.position.multiplyScalar(len / camera.position.length());
+        camera.position.multiplyScalar(distance / camera.position.length());
+
+        camera.lookAt(target);
     }, [
         model,
+        currentScene,
         freeCameraEnabled,
         angle,
         camera,
-        cameraHeight,
         target,
         dispatch,
         distance,
@@ -92,12 +86,11 @@ export const SceneBase: React.FC<PropsWithChildren> = ({ children }) => {
                                 Math.PI / 2,
                             ),
                         ) + Math.PI,
-                    cameraHeight: pos.y,
                     distance: pos.length(),
                 }),
             );
         }, 200),
-        [],
+        [model],
     );
 
     return (
@@ -118,7 +111,7 @@ export const SceneBase: React.FC<PropsWithChildren> = ({ children }) => {
                             <sphereGeometry args={[100000]} />
                             <meshBasicMaterial
                                 map={skyTexture}
-                                opacity={0.5}
+                                opacity={0.8}
                                 transparent
                                 side={DoubleSide}
                             />
@@ -154,6 +147,7 @@ export const SceneBase: React.FC<PropsWithChildren> = ({ children }) => {
                     enablePan={false}
                     enableDamping={false}
                     rotateSpeed={0.9}
+                    minPolarAngle={Math.PI / 3}
                     maxPolarAngle={Math.PI / 2 - 0.01}
                     minDistance={sceneDetails.camera.distanceLimits.min}
                     maxDistance={sceneDetails.camera.distanceLimits.max}
